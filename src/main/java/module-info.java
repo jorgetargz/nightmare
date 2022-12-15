@@ -8,14 +8,14 @@ module game {
     requires jakarta.cdi;
     requires java.logging;
 
-    exports game.dungeon;
     exports game.util;
+    exports game.demiurge;
+    exports game.dungeon;
     exports game.dungeon.spell;
-    exports game.character.exceptions;
+    exports game.dungeon.structure;
     exports game.dungeon.structure.exceptions;
     exports game.dungeon.object.exceptions;
-    exports game.dungeon.structure;
-    exports game.demiurge;
+    exports game.character.exceptions;
     exports game.gui.screens.main;
     exports wizardNightmare;
 
