@@ -1,4 +1,4 @@
-module nightmare {
+module game {
     requires javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
@@ -8,34 +8,23 @@ module nightmare {
     requires jakarta.cdi;
     requires java.logging;
 
-    exports nightmare.gui.main;
-    exports nightmare.gui.main.common;
-    exports nightmare.gui.screens.main;
-    exports nightmare.gui.screens.common;
+    exports game.util;
+    exports game.demiurge;
+    exports game.dungeon;
+    exports game.dungeon.spell;
+    exports game.dungeon.structure;
+    exports game.dungeon.structure.exceptions;
+    exports game.dungeon.object.exceptions;
+    exports game.character.exceptions;
+    exports game.gui.screens.main;
+    exports wizardNightmare;
 
-    exports nightmare.dungeon;
-    exports nightmare.pj;
-    exports nightmare.pnj;
-    exports nightmare.items;
-    exports nightmare.management;
-    exports nightmare.spells;
-    exports nightmare.util;
-    exports nightmare;
-
-    opens nightmare.gui.main;
-    opens nightmare.gui.main.common;
-    opens nightmare.gui.screens.main;
-    opens nightmare.gui.screens.common;
-
-    opens nightmare.dungeon;
-    opens nightmare.pj;
-    opens nightmare.pnj;
-    opens nightmare.items;
-    opens nightmare.management;
-    opens nightmare.spells;
-    opens nightmare.util;
-    opens nightmare;
-
+    opens game.gui.main;
+    opens game.gui.main.common;
+    opens game.gui.screens.main to javafx.fxml;
+    opens game.gui.screens.common;
+    opens game.dungeon;
+    opens game.util;
 
 
 }
