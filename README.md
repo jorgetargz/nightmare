@@ -54,6 +54,3 @@ Entrega 23.02.2023
   • Código fuente (propio)
   • Ejecutable valido para Linux y Windows (propio)
   • Documento de proyecto completamente terminado (común & propio)
-
-
-
