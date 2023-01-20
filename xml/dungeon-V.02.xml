@@ -1,6 +1,7 @@
 <demiurge>
     <dungeon>
         <home>
+			<description>My Home!</description>
             <comfort>1</comfort>
             <singa>
 				<currentValue>10</currentValue>

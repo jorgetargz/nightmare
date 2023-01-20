@@ -46,6 +46,7 @@ import java.util.*;
 public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     //Home
+    static String DESCRIPTION_HOME;
     static int INITIAL_COMFORT;
     static int INITIAL_SINGA;
     static int INITIAL_SINGA_CAPACITY;
@@ -119,6 +120,9 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
             switch (getNombre(node)) {
+                case "description":
+                    DESCRIPTION_HOME = node.getTextContent();
+                    break;
                 case "comfort":
                     //<comfort>X</comfort>
                     INITIAL_COMFORT = Integer.parseInt(node.getTextContent());
@@ -188,6 +192,8 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                     }
                     addSpellsToLibrary();
                     break;
+                default:
+                    throw new IllegalArgumentException("NODO NO VÁLIDO EN //home/* : " + getNombre(node));
             }
 
 
@@ -198,7 +204,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 //                    }
 // SOUT                System.out.println(node.getNodeName());
         }
-        Home home = new Home("HOME", INITIAL_COMFORT, INITIAL_SINGA, INITIAL_SINGA_CAPACITY, CHEST, LIBRARY);
+        Home home = new Home(DESCRIPTION_HOME, INITIAL_COMFORT, INITIAL_SINGA, INITIAL_SINGA_CAPACITY, CHEST, LIBRARY);
         demiurge.setHome(home);
         System.out.println(home);
     }
