@@ -26,7 +26,7 @@ Entrega 20.01.2023 (ya está organizado)
 
 Entrega 27.01.2023
 
-  -- documento con...
+  -- documento con... {HECHO}
 
     • Diseño del modelo de datos (común)
 
