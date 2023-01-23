@@ -19,6 +19,7 @@
 						<level value="1"/>
 					</item>
 					<item type="weapon">
+						<domain element="none"/>
 						<level value="1"/>
 					</item>
 				</items>
@@ -71,6 +72,8 @@
 				<exit value="true"/>
 				<description>Room 2, the exit</description>
 				<visited>false</visited>
+				<items></items>
+				<creatures></creatures>
 			</room>
             <doors>
                 <door>
@@ -103,7 +106,9 @@
             </crystals>
         </crystalCarrier>
         <weareables>
-			<max w="1" n="1" r="2"/>
+			<weaponsMAX>1</weaponsMAX>
+			<necklacesMAX>1</necklacesMAX>
+			<ringsMAX>2</ringsMAX>
 			<items>
 				<item type="necklace">
 					<domain element="life"/>
@@ -114,7 +119,7 @@
 					<level value="1"/>
 				</item>
 				<item type="weapon">
-					<domain value="none"/>
+					<domain element="none"/>
 					<level value="1"/>
 				</item>
 			</items>

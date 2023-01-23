@@ -20,11 +20,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import javax.xml.xpath.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -81,8 +88,20 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     public static void main(String[] args) {
         Demiurge demiurge = new Demiurge();
         final File XMLFILE = new File("xml/dungeon-V.02.xml");
-
+        final File XSDFILE = new File("xml/dungeon_schema.xsd");
         try {
+
+            try {
+                SchemaFactory factory =
+                        SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                Schema schema = factory.newSchema(XSDFILE);
+                Validator validator = schema.newValidator();
+                validator.validate(new StreamSource(XMLFILE));
+            } catch (IOException | SAXException e) {
+                System.out.println("Exception: "+e);
+            }
+
+
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document baseXML = dBuilder.parse(XMLFILE);
