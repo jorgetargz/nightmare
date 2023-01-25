@@ -2,7 +2,7 @@
 
 Entrega 20.01.2023 (ya está organizado)
 
-  -- definiciones y especificación de requisitos
+-- definiciones y especificación de requisitos
 
     • Definición general 
 
@@ -26,7 +26,7 @@ Entrega 20.01.2023 (ya está organizado)
 
 Entrega 27.01.2023
 
-  -- documento con... {HECHO}
+-- documento con... {HECHO}
 
     • Diseño del modelo de datos (común)
 
@@ -34,7 +34,7 @@ Entrega 27.01.2023
 
 Entrega 03.02.2023
 
-  -- documento con las definiciones de las pruebas {HECHO}
+-- documento con las definiciones de las pruebas {HECHO}
 
     • Plan de realización de pruebas (común)
 
@@ -42,7 +42,7 @@ Entrega 03.02.2023
 
     • Elaboración de plantilla para uso de todos los grupos (común)
 
-  -- versión 1 con...  
+-- versión 1 con...
 
      1. Hasta dónde se haya hecho (propio)
 
@@ -59,7 +59,7 @@ Entrega 03.02.2023
 
 Entrega 10.02.2023
 
-  -- no se entrega, solo se realizan
+-- no se entrega, solo se realizan
 
     • Pruebas entre grupos
 
@@ -71,19 +71,19 @@ Entrega 10.02.2023
 
         4. D hace A y B
 
-  -- plantillas rellenas con 
+-- plantillas rellenas con
 
     • Entrega según plantilla (propio)
 
 Entrega 23.02.2023
 
-  -- manuales de...
+-- manuales de...
 
     • De usuario (propio)
 
     • De instalación (común)
 
-  -- versión 1 con...  
+-- versión 1 con...
 
     • Todos los requisitos cubiertos (propio)
 

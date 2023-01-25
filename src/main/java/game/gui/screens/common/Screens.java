@@ -14,7 +14,13 @@ public enum Screens {
     RATING_LIST(ScreenConstants.FXML_RATING_LIST_SCREEN_FXML),
     RATING_ADD(ScreenConstants.FXML_RATING_ADD_SCREEN_FXML),
 
-    NUEVAPARTIDA();
+    INICIO("/fxml/partida/inicio/pantallaInicio.fxml"),
+    CASAPRINCIPAL("/fxml/casaMago/casaPrincipal.fxml"),
+    ALMACEN("/fxml/casaMago/almacen.fxml"),
+    BIBLIOTECA("/fxml/casaMago/biblioteca.fxml"),
+    PANTALLAJUEGO("/fxml/juego/pantallaJuego.fxml"),
+    PANTALLAPELEAS("/fxml/juego/pantallaPeleas.fxml"),
+    BBDD("/fxml/partida/bbdd/bbdd.fxml");
 
     private final String path;
 

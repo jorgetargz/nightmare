@@ -195,7 +195,7 @@ public class MainController {
     }
 
     public void nuevaPartida() {
-        cargarPantalla(Screens.NUEVAPARTIDA);
+        cargarPantalla(Screens.INICIO);
     }
 
     public void guardar() {
