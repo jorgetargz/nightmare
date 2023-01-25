@@ -160,62 +160,10 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                     getHomeSingaValues(node);
                     break;
                 case "chest":
-                    //<chest>
-                    //  <capacity>X</capacity>
-                    //  <items>
-                    //      <item type="X">
-                    //          <domain element="X" />
-                    //          <level value="X" />
-                    //      </item>
-                    //      <item...
-                    //      </item>
-                    //  </items>
-                    //</chest>
-                    NodeList chestChilds = node.getChildNodes();
-                    for (int j = 0; j < chestChilds.getLength(); j++) {
-                        Node chestChild = chestChilds.item(j);
-                        if (elNodoEsElemento(chestChild)) {
-                            switch (getNombre(chestChild)) {
-                                case "capacity":
-                                    //<capacity>X</capacity>
-                                    INITIAL_CHEST_CAPACITY = Integer.parseInt(chestChild.getTextContent());
-//                                            c = new Chest(INITIAL_CHEST_CAPACITY);
-                                    break;
-                                case "items":
-                                    CHEST_ITEMS = getItemsNode(chestChild, "//home/chest/items/");
-//SOUT                                        System.out.println(CHEST_ITEMS);
-                                    break;
-                                default:
-                                    throw new IllegalArgumentException("NODO NO VÁLIDO EN //home/chest/* : " + getNombre(chestChild));
-                            }
-                        }
-                    }
-                    // Una vez que recorrimos todos los elemenos del chest, creamos el objeto
-                    createChest();
+                    generateChest(node);
                     break;
                 case "library":
-//                            <library>
-//                                <spells>
-//                                    <spell>
-//                                        <domain element="X"/>
-//                                        <level value="X"/>
-//                                    </spell>
-//                                    <spell>...</spell>
-//                                </spells>
-//                            </library>
-                    NodeList libraryChilds = node.getChildNodes();
-                    for (int j = 0; j < libraryChilds.getLength(); j++) {
-                        Node chestChild = libraryChilds.item(j);
-                        if (elNodoEsElemento(chestChild)) {
-                            switch (getNombre(chestChild)) {
-                                case "spells":
-                                    LIBRARY_SPELLS = getSpellsNode(chestChild, "//home/library/spells/");
-// SOUT                                        System.out.println(LIBRARY_SPELLS);
-                                    break;
-                            }
-                        }
-                    }
-                    addSpellsToLibrary();
+                    createLibrary(node);
                     break;
                 default:
                     throw new IllegalArgumentException("NODO NO VÁLIDO EN //home/* : " + getNombre(node));
@@ -232,6 +180,66 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         Home home = new Home(DESCRIPTION_HOME, INITIAL_COMFORT, INITIAL_SINGA, INITIAL_SINGA_CAPACITY, CHEST, LIBRARY);
         demiurge.setHome(home);
         System.out.println(home);
+    }
+
+    private static void generateChest(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
+        //<chest>
+        //  <capacity>X</capacity>
+        //  <items>
+        //      <item type="X">
+        //          <domain element="X" />
+        //          <level value="X" />
+        //      </item>
+        //      <item...
+        //      </item>
+        //  </items>
+        //</chest>
+        NodeList chestChilds = node.getChildNodes();
+        for (int j = 0; j < chestChilds.getLength(); j++) {
+            Node chestChild = chestChilds.item(j);
+            if (elNodoEsElemento(chestChild)) {
+                switch (getNombre(chestChild)) {
+                    case "capacity":
+                        //<capacity>X</capacity>
+                        INITIAL_CHEST_CAPACITY = Integer.parseInt(chestChild.getTextContent());
+//                                            c = new Chest(INITIAL_CHEST_CAPACITY);
+                        break;
+                    case "items":
+                        CHEST_ITEMS = getItemsNode(chestChild, "//home/chest/items/");
+//SOUT                                        System.out.println(CHEST_ITEMS);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("NODO NO VÁLIDO EN //home/chest/* : " + getNombre(chestChild));
+                }
+            }
+        }
+        // Una vez que recorrimos todos los elemenos del chest, creamos el objeto
+        defineChestAndAddItems();
+    }
+
+    private static void createLibrary(Node node) throws ValueOverMaxException {
+        //                            <library>
+//                                <spells>
+//                                    <spell>
+//                                        <domain element="X"/>
+//                                        <level value="X"/>
+//                                    </spell>
+//                                    <spell>...</spell>
+//                                </spells>
+//                            </library>
+        NodeList libraryChilds = node.getChildNodes();
+        for (int j = 0; j < libraryChilds.getLength(); j++) {
+            Node chestChild = libraryChilds.item(j);
+            if (elNodoEsElemento(chestChild)) {
+                switch (getNombre(chestChild)) {
+                    case "spells":
+                        LIBRARY_SPELLS = getSpellsNode(chestChild, "//home/library/spells/");
+// SOUT                                        System.out.println(LIBRARY_SPELLS);
+                        break;
+                }
+            }
+        }
+        addSpellsToLibrary();
     }
 
     private static void addSpellsToLibrary() {
@@ -295,7 +303,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         return spell;
     }
 
-    private static void createChest() throws ContainerUnacceptedItemException, ContainerFullException {
+    private static void defineChestAndAddItems() throws ContainerUnacceptedItemException, ContainerFullException {
         CHEST = new Chest(INITIAL_CHEST_CAPACITY);
         for (int k = 0; k < CHEST_ITEMS.size(); k++) {
             CHEST.add(CHEST_ITEMS.get(k));
