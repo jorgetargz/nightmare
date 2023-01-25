@@ -7,6 +7,8 @@ import java.io.File;
 
 public interface DungeonLoaderXML {
 
-    public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file);
+    void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file);
+
+    void save(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file);
 
 }
