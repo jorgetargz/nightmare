@@ -27,7 +27,8 @@
                 <Menu fx:id="menuCargar" mnemonicParsing="false" text="Partida">
                     <MenuItem fx:id="xml" mnemonicParsing="false" onAction="#cargarPartidaXML"
                               text="Cargar XML"/>
-                    <MenuItem fx:id="bbdd" mnemonicParsing="false" onAction="#cargarPartidaBBDD" text="Cargar base de datos"/>
+                    <MenuItem fx:id="bbdd" mnemonicParsing="false" onAction="#cargarPartidaBBDD"
+                              text="Cargar base de datos"/>
                     <MenuItem fx:id="nueva" mnemonicParsing="false" onAction="#nuevaPartida" text="Nueva partida"/>
                 </Menu>
             </MenuBar>
