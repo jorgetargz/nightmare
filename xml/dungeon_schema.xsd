@@ -120,7 +120,7 @@
                                                     <xs:element name="creatures">
                                                         <xs:complexType>
                                                             <xs:sequence>
-                                                                <xs:element name="creature" maxOccurs="unbounded" minOccurs="0">
+                                                                <xs:element name="creature" minOccurs="0">
                                                                     <xs:complexType>
                                                                         <xs:sequence>
                                                                             <xs:element name="name" type="xs:string"/>

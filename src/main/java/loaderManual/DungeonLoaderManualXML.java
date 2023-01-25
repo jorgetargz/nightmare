@@ -2,17 +2,16 @@ package loaderManual;
 
 import game.Domain;
 import game.DungeonLoaderXML;
+import game.character.Creature;
 import game.demiurge.Demiurge;
 import game.demiurge.DungeonConfiguration;
-import game.dungeon.Home;
+import game.dungeon.*;
 import game.object.*;
 import game.objectContainer.Chest;
+import game.objectContainer.RoomSet;
 import game.objectContainer.exceptions.ContainerFullException;
 import game.objectContainer.exceptions.ContainerUnacceptedItemException;
-import game.spell.AirAttack;
-import game.spell.ElectricAttack;
-import game.spell.FireAttack;
-import game.spell.Spell;
+import game.spell.*;
 import game.spellContainer.Knowledge;
 import game.spellContainer.Library;
 import game.util.ValueOverMaxException;
@@ -54,20 +53,27 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     //Home
     static String DESCRIPTION_HOME;
-    static int INITIAL_COMFORT;
-    static int INITIAL_SINGA;
-    static int INITIAL_SINGA_CAPACITY;
-    static int INITIAL_CHEST_CAPACITY;
+    static int INITIAL_COMFORT_HOME;
+    static int INITIAL_SINGA_HOME;
+    static int INITIAL_SINGA_CAPACITY_HOME;
+    static int INITIAL_CHEST_CAPACITY_HOME;
 
-    static List<Item> CHEST_ITEMS = new ArrayList<>();
+    static List<Item> CHEST_ITEMS_HOME = new ArrayList<>();
 
-    static Chest CHEST;
+    static Chest CHEST_HOME;
 
 
-    static Knowledge LIBRARY = new Library();
+    static Knowledge LIBRARY_HOME = new Library();
 
-    static List<Spell> LIBRARY_SPELLS = new ArrayList<>();
+    static List<Spell> LIBRARY_SPELLS_HOME = new ArrayList<>();
 
+    static Home HOME;
+
+    // Dungeon
+    static Dungeon DUNGEON = new Dungeon();
+
+    //Rooms
+    static List<Room> ROOMS = new ArrayList<>();
 
     //Wizard
     static int INITIAL_LIFE = 10;
@@ -120,9 +126,10 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             // Si no se encuentra la expresión, devuelve "" pero NO NULL
 
             createHome(demiurge, baseXML, xpath);
+            createRooms(demiurge, baseXML, xpath);
 
 
-        } catch (Exception e) {
+        } catch (Exception | SpellUnknowableException e) {
             e.printStackTrace();
         } catch (ItemCreationErrorException e) {
             // da al crear el necklace
@@ -138,6 +145,192 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         }
     }
 
+    private static void createRooms(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException, SpellUnknowableException, ContainerUnacceptedItemException, ValueOverMaxException, ContainerFullException, ItemCreationErrorException {
+        XPathExpression expr = xpath.compile("/demiurge/dungeon/rooms/*");
+        NodeList rooms = (NodeList) expr.evaluate(baseXML, XPathConstants.NODESET);
+        for (int i = 0; i < rooms.getLength(); i++) {
+            switch (rooms.item(i).getNodeName()) {
+                case "room":
+                    createRoom(rooms.item(i));
+                    break;
+                case "doors":
+                    createDoors(rooms.item(i));
+                    break;
+                default:
+                    throw new RuntimeException("El nodo no es valido:  " + rooms.item(i).getNodeName());
+            }
+        }
+        for (int i = 0; i < ROOMS.size(); i++) {
+            DUNGEON.addRoom(ROOMS.get(i));
+        }
+        demiurge.setDungeon(DUNGEON);
+    }
+
+    private static void createDoors(Node doors) {
+        for (int i = 0; i < doors.getChildNodes().getLength(); i++) {
+            Node door = doors.getChildNodes().item(i);
+            if (elNodoEsElemento(door)){
+                switch (door.getNodeName()) {
+                    case "door":
+                        createDoor(door);
+                        break;
+                }
+            }
+
+        }
+
+    }
+
+    private static void createDoor(Node door) {
+        Site site1 = null;
+        Site site2 = null;
+        for (int i = 0; i < door.getChildNodes().getLength(); i++) {
+            Node doorChild = door.getChildNodes().item(i);
+            if (elNodoEsElemento(doorChild)){
+                switch (doorChild.getNodeName()) {
+                    case "idRoom1":
+                        site1 = getSite(Integer.parseInt(doorChild.getTextContent()));
+                        break;
+                    case "idRoom2":
+                        site2 = getSite(Integer.parseInt(doorChild.getTextContent()));
+                        break;
+                }
+            }
+        }
+        //CREATE DOOR
+        if (site1 != null && site2 != null) {
+            new Door(site1, site2);
+        } else {
+            throw new RuntimeException("Error al crear la puerta");
+        }
+    }
+
+    private static Site getSite(int roomID) {
+        Site r = ROOMS.stream().filter(room -> room.getID() == roomID).findFirst().orElse(null);
+        if (r == null) {
+            if (roomID == -1){
+                r = HOME;
+            } else {
+                throw new RuntimeException("No se ha encontrado la sala con ID " + roomID);
+            }
+        }
+        return r;
+
+    }
+
+    private static void createRoom(Node roomNode) throws ItemCreationErrorException, SpellUnknowableException, ValueOverMaxException, ContainerUnacceptedItemException, ContainerFullException {
+//            <room>
+//                <id>1</id>
+//                <exit value="false"/>
+//                <description>Room 1 with creature and necklace</description>
+//				  <visited>false</visited>
+//                <items...>
+//                <creatures...>
+//            </room>
+        NodeList roomChildren = roomNode.getChildNodes();
+        int id = -1;
+        boolean exit = false;
+        String description = "";
+        boolean visited = false;
+        List<Item> items = new ArrayList<>();
+        Creature creature = null;
+        for (int i = 0; i < roomChildren.getLength(); i++) {
+            Node child = roomChildren.item(i);
+            if (elNodoEsElemento(child)) {
+                switch (getNombre(child)) {
+                    case "id":
+                        id = Integer.parseInt(child.getTextContent());
+                        break;
+                    case "exit":
+                        exit = Boolean.parseBoolean(getAtributo(child, "value"));
+                        break;
+                    case "description":
+                        description = child.getTextContent();
+                        break;
+                    case "visited":
+                        visited = Boolean.parseBoolean(child.getTextContent());
+                        break;
+                    case "items":
+                        items = getItemsNode(child, "//room/items/*");
+                        break;
+                    case "creatures":
+                        creature = getCreatureNode(child);
+                        break;
+                }
+            }
+
+        }
+        Room newR = new Room(id, description, new RoomSet(items.size()), exit);
+        for (int j = 0; j < items.size(); j++) {
+            newR.addItem(items.get(j));
+        }
+        if (creature != null) {
+            newR.setCreature(creature);
+        }
+        if (visited){ newR.visit(); }
+        //TODO: CrystalCarrier
+        ROOMS.add(newR);
+    }
+
+    private static Creature getCreatureNode(Node creaturesNode) throws SpellUnknowableException, ValueOverMaxException {
+//				<creatures>
+//					<creature type="electricity">
+//						<name>Big Monster</name>
+//						<life>5</life>
+//						<punch>1</punch>
+//						<spells>
+//							<spell>
+//								<domain element="electricity"/>
+//								<level value="1"/>
+//							</spell>
+//						</spells>
+//					</creature>
+//				</creatures>
+        Creature c = null;
+        for (int i = 0; i < creaturesNode.getChildNodes().getLength(); i++) {
+            Node child = creaturesNode.getChildNodes().item(i);
+            if (elNodoEsElemento(child)) {
+                switch (getNombre(child)) {
+                    case "creature":
+                        c = getCreature(child);
+                }
+            }
+        }
+        return c;
+    }
+
+    private static Creature getCreature(Node creatureNode) throws ValueOverMaxException, SpellUnknowableException {
+        Domain d = Domain.valueOf(getAtributo(creatureNode, "type").toUpperCase());
+        String name = null;
+        int life = -1;
+        int punch = -1;
+        List<Spell> spells = new ArrayList<>();
+        for (int i = 0; i < creatureNode.getChildNodes().getLength(); i++) {
+            Node child = creatureNode.getChildNodes().item(i);
+            if (elNodoEsElemento(child)) {
+                switch (getNombre(child)) {
+                    case "name":
+                        name = child.getTextContent();
+                        break;
+                    case "life":
+                        life = Integer.parseInt(child.getTextContent());
+                        break;
+                    case "punch":
+                        punch = Integer.parseInt(child.getTextContent());
+                        break;
+                    case "spells":
+                        spells = getSpellsNode(child, "//creature/spells/*");
+                        break;
+                }
+            }
+        }
+         Creature c = new Creature(name, life, punch, d);
+        for (int i = 0; i < spells.size(); i++) {
+            c.addSpell(spells.get(i));
+        }
+        return c;
+    }
+
     private static void createHome(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException, ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException, ValueOverMaxException {
         // GETTING HOME CHILDREN --> [description, comfort, singa, chest, library]
         XPathExpression expr = xpath.compile("/demiurge/dungeon/home/*");
@@ -150,7 +343,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                     break;
                 case "comfort":
                     //<comfort>X</comfort>
-                    INITIAL_COMFORT = Integer.parseInt(node.getTextContent());
+                    INITIAL_COMFORT_HOME = Integer.parseInt(node.getTextContent());
                     break;
                 case "singa":
                     //<singa>
@@ -177,9 +370,9 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 //                    }
 // SOUT                System.out.println(node.getNodeName());
         }
-        Home home = new Home(DESCRIPTION_HOME, INITIAL_COMFORT, INITIAL_SINGA, INITIAL_SINGA_CAPACITY, CHEST, LIBRARY);
-        demiurge.setHome(home);
-        System.out.println(home);
+        HOME = new Home(DESCRIPTION_HOME, INITIAL_COMFORT_HOME, INITIAL_SINGA_HOME, INITIAL_SINGA_CAPACITY_HOME, CHEST_HOME, LIBRARY_HOME);
+        demiurge.setHome(HOME);
+        System.out.println(HOME);
     }
 
     private static void generateChest(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
@@ -201,11 +394,11 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                 switch (getNombre(chestChild)) {
                     case "capacity":
                         //<capacity>X</capacity>
-                        INITIAL_CHEST_CAPACITY = Integer.parseInt(chestChild.getTextContent());
+                        INITIAL_CHEST_CAPACITY_HOME = Integer.parseInt(chestChild.getTextContent());
 //                                            c = new Chest(INITIAL_CHEST_CAPACITY);
                         break;
                     case "items":
-                        CHEST_ITEMS = getItemsNode(chestChild, "//home/chest/items/");
+                        CHEST_ITEMS_HOME = getItemsNode(chestChild, "//home/chest/items/");
 //SOUT                                        System.out.println(CHEST_ITEMS);
                         break;
                     default:
@@ -233,7 +426,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             if (elNodoEsElemento(chestChild)) {
                 switch (getNombre(chestChild)) {
                     case "spells":
-                        LIBRARY_SPELLS = getSpellsNode(chestChild, "//home/library/spells/");
+                        LIBRARY_SPELLS_HOME = getSpellsNode(chestChild, "//home/library/spells/");
 // SOUT                                        System.out.println(LIBRARY_SPELLS);
                         break;
                 }
@@ -243,8 +436,8 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     }
 
     private static void addSpellsToLibrary() {
-        for (int j = 0; j < LIBRARY_SPELLS.size(); j++) {
-            LIBRARY.add(LIBRARY_SPELLS.get(j));
+        for (int j = 0; j < LIBRARY_SPELLS_HOME.size(); j++) {
+            LIBRARY_HOME.add(LIBRARY_SPELLS_HOME.get(j));
         }
     }
 
@@ -304,9 +497,9 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     }
 
     private static void defineChestAndAddItems() throws ContainerUnacceptedItemException, ContainerFullException {
-        CHEST = new Chest(INITIAL_CHEST_CAPACITY);
-        for (int k = 0; k < CHEST_ITEMS.size(); k++) {
-            CHEST.add(CHEST_ITEMS.get(k));
+        CHEST_HOME = new Chest(INITIAL_CHEST_CAPACITY_HOME);
+        for (int k = 0; k < CHEST_ITEMS_HOME.size(); k++) {
+            CHEST_HOME.add(CHEST_ITEMS_HOME.get(k));
         }
     }
 
@@ -379,8 +572,8 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     private static void getHomeSingaValues(Node node) {
         NodeList listSinga = node.getChildNodes();
         Map<String, Integer> currentAndMaxValue = getCurrentValueAndMaxValue(listSinga);
-        INITIAL_SINGA = currentAndMaxValue.get("currentValue");
-        INITIAL_SINGA_CAPACITY = currentAndMaxValue.get("maxValue");
+        INITIAL_SINGA_HOME = currentAndMaxValue.get("currentValue");
+        INITIAL_SINGA_CAPACITY_HOME = currentAndMaxValue.get("maxValue");
     }
 
     private static Map<String, Integer> getCurrentValueAndMaxValue(NodeList list) {
