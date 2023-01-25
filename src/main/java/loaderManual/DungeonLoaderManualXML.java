@@ -370,27 +370,31 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     private static void getHomeSingaValues(Node node) {
         NodeList listSinga = node.getChildNodes();
-        getCurrentValueAndMaxValue(listSinga);
+        Map<String, Integer> currentAndMaxValue = getCurrentValueAndMaxValue(listSinga);
+        INITIAL_SINGA = currentAndMaxValue.get("currentValue");
+        INITIAL_SINGA_CAPACITY = currentAndMaxValue.get("maxValue");
     }
 
-    private static void getCurrentValueAndMaxValue(NodeList list) {
+    private static Map<String, Integer> getCurrentValueAndMaxValue(NodeList list) {
+        Map<String, Integer> values = new HashMap<>();
         for (int j = 0; j < list.getLength(); j++) {
             Node nodeSinga = list.item(j);
             if (elNodoEsElemento(nodeSinga)) {
                 switch (getNombre(nodeSinga)) {
                     case "currentValue":
                         //<currentValue>X</currentValue>
-                        INITIAL_SINGA = Integer.parseInt(nodeSinga.getTextContent());
+                         values.put("currentValue", Integer.parseInt(nodeSinga.getTextContent()));
                         break;
                     case "maxValue":
                         //<maxValue>X</maxValue>
-                        INITIAL_SINGA_CAPACITY = Integer.parseInt(nodeSinga.getTextContent());
+                        values.put("maxValue", Integer.parseInt(nodeSinga.getTextContent()));
                         break;
                     default:
                         throw new IllegalArgumentException("EL NODO DENTRO DE" + nodeSinga.getNodeName() + " NO ES VALIDO");
                 }
             }
         }
+        return values;
     }
 
     private static boolean elNodoEsElemento(Node no) {
