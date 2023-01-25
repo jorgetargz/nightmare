@@ -3,11 +3,13 @@ package loaderManual;
 import game.Domain;
 import game.DungeonLoaderXML;
 import game.character.Creature;
+import game.character.Wizard;
 import game.demiurge.Demiurge;
 import game.demiurge.DungeonConfiguration;
 import game.dungeon.*;
 import game.object.*;
 import game.objectContainer.Chest;
+import game.objectContainer.CrystalCarrier;
 import game.objectContainer.RoomSet;
 import game.objectContainer.exceptions.ContainerFullException;
 import game.objectContainer.exceptions.ContainerUnacceptedItemException;
@@ -76,11 +78,14 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     static List<Room> ROOMS = new ArrayList<>();
 
     //Wizard
-    static int INITIAL_LIFE = 10;
-    static int INITIAL_LIFE_MAX = 10;
-    static int INITIAL_ENERGY = 10;
-    static int INITIAL_ENERGY_MAX = 10;
+    static String NAME_WIZARD;
+    static int INITIAL_LIFE_WIZARD = 10;
+    static int INITIAL_LIFE_MAX_WIZARD = 10;
+    static int INITIAL_ENERGY_WIZARD = 10;
+    static int INITIAL_ENERGY_MAX_WIZARD = 10;
     static int INITIAL_CRYSTAL_CARRIER_CAPACITY = 3;
+    static List<SingaCrystal> CRYSTALS_CARRIED_WIZARD = new ArrayList<>();
+    static CrystalCarrier CRYSTAL_CARRIER_WIZARD;
     static int INITIAL_CRYSTAL_BAG_CAPACITY = 2;
     static int INITIAL_MAX_WEAPONS = 1;
     static int INITIAL_MAX_NECKLACES = 1;
@@ -127,6 +132,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
             createHome(demiurge, baseXML, xpath);
             createRooms(demiurge, baseXML, xpath);
+            createWizard(demiurge, baseXML, xpath);
 
 
         } catch (Exception | SpellUnknowableException e) {
@@ -329,6 +335,116 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             c.addSpell(spells.get(i));
         }
         return c;
+    }
+    private static void createWizard(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException, ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException, ValueOverMaxException {
+        // GETTING HOME CHILDREN --> [description, comfort, singa, chest, library]
+        XPathExpression expr = xpath.compile("/demiurge/wizard/*");
+        NodeList list = (NodeList) expr.evaluate(baseXML, XPathConstants.NODESET);
+        for (int i = 0; i < list.getLength(); i++) {
+            Node node = list.item(i);
+            switch (getNombre(node)) {
+                case "name":
+                    NAME_WIZARD = node.getTextContent();
+                    break;
+                case "life":
+                    getLifeValues(node);
+                    break;
+                case "energy":
+                    getEnergyValues(node);
+                    break;
+                case "crystalCarrier":
+                    generateCrystalCarrier(node);
+                    break;
+                case "weareables":
+                    createLibrary(node);
+                    break;
+                case "jewelryBag":
+                    createLibrary(node);
+                    break;
+                default:
+                    throw new IllegalArgumentException("NODO NO VÁLIDO EN //home/* : " + getNombre(node));
+            }
+
+        }
+        Wizard wizard = new Wizard(NAME_WIZARD, INITIAL_LIFE_WIZARD, INITIAL_LIFE_MAX_WIZARD, INITIAL_ENERGY_WIZARD, INITIAL_ENERGY_MAX_WIZARD,null, CRYSTAL_CARRIER_WIZARD, null);
+        demiurge.setWizard(wizard);
+        System.out.println(wizard);
+    }
+
+    private static void getLifeValues(Node node) {
+        NodeList listSinga = node.getChildNodes();
+        Map<String, Integer> currentAndMaxValue = getCurrentValueAndMaxValue(listSinga);
+        INITIAL_LIFE_WIZARD = currentAndMaxValue.get("currentValue");
+        INITIAL_LIFE_MAX_WIZARD = currentAndMaxValue.get("maxValue");
+    }
+
+    private static void getEnergyValues(Node node) {
+        NodeList listSinga = node.getChildNodes();
+        Map<String, Integer> currentAndMaxValue = getCurrentValueAndMaxValue(listSinga);
+        INITIAL_ENERGY_WIZARD = currentAndMaxValue.get("currentValue");
+        INITIAL_ENERGY_MAX_WIZARD = currentAndMaxValue.get("maxValue");
+    }
+
+    private static void generateCrystalCarrier(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
+//        <capacity>3</capacity>
+//            <crystals>
+//                <crystal>
+//                    <singa>10</singa>
+//                </crystal>
+//            </crystals>
+        NodeList chestChilds = node.getChildNodes();
+        for (int j = 0; j < chestChilds.getLength(); j++) {
+            Node chestChild = chestChilds.item(j);
+            if (elNodoEsElemento(chestChild)) {
+                switch (getNombre(chestChild)) {
+                    case "capacity":
+                        //<capacity>X</capacity>
+                        INITIAL_CRYSTAL_CARRIER_CAPACITY = Integer.parseInt(chestChild.getTextContent());
+                        break;
+                    case "crystals":
+                        CRYSTALS_CARRIED_WIZARD = getCrystalsNode(chestChild, "//wizard/crystalCarrier/crystals/");
+                        System.out.println(CRYSTALS_CARRIED_WIZARD);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("NODO NO VÁLIDO EN //wizard/crystalCarrier/* : " + getNombre(chestChild));
+                }
+            }
+        }
+        CRYSTAL_CARRIER_WIZARD = new CrystalCarrier(INITIAL_CRYSTAL_CARRIER_CAPACITY);
+        for (SingaCrystal crystal : CRYSTALS_CARRIED_WIZARD) {
+            CRYSTAL_CARRIER_WIZARD.add(crystal);
+        }
+    }
+    private static List<SingaCrystal> getCrystalsNode(Node node, String xPath) throws ItemCreationErrorException {
+        List<SingaCrystal> crystals = new ArrayList<>();
+        //            <crystals>
+//                <crystal>
+//                    <singa>10</singa>
+//                </crystal>
+//            </crystals>
+        NodeList cristalChilds = node.getChildNodes();
+        for (int k = 0; k < cristalChilds.getLength(); k++) {
+            Node crystal = cristalChilds.item(k);
+            if (elNodoEsElemento(crystal)) {
+                switch (getNombre(crystal)) {
+                    case "crystal":
+                        //<singa>10</singa>
+                        //el index es uno porque el primer elemento es mierda
+                        int valorReal = Integer.parseInt(crystal.getChildNodes().item(1).getTextContent());
+                        SingaCrystal x = SingaCrystal.createCrystal(valorReal);
+                        while (valorReal != x.getValue()) {
+                            x = SingaCrystal.createCrystal(valorReal);
+                        }
+                        crystals.add(x);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("NODO NO VÁLIDO EN " + xPath + "* : " + getNombre(crystal));
+
+                }
+            }
+        }
+        return crystals;
+
     }
 
     private static void createHome(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException, ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException, ValueOverMaxException {
