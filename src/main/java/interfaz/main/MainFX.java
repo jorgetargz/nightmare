@@ -1,7 +1,8 @@
-package game.gui.main;
+package interfaz.main;
 
-import game.gui.main.common.Constants;
-import game.gui.screens.main.MainController;
+import interfaz.main.common.Constants;
+import interfaz.screens.common.Screens;
+import interfaz.screens.main.MainController;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +21,7 @@ public class MainFX {
 
     public void start(@Observes @StartupScene Stage stage) {
         try {
-            Parent fxmlParent = fxmlLoader.load(getClass().getResourceAsStream(Constants.FXML_MAIN_SCREEN_FXML));
+            Parent fxmlParent = fxmlLoader.load(getClass().getResourceAsStream(Screens.MAIN.getPath()));
             MainController controller = fxmlLoader.getController();
             controller.setStage(stage);
 

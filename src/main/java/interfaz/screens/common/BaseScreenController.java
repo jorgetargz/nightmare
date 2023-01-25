@@ -1,6 +1,6 @@
-package game.gui.screens.common;
+package interfaz.screens.common;
 
-import game.gui.screens.main.MainController;
+import interfaz.screens.main.MainController;
 
 
 public class BaseScreenController {

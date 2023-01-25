@@ -1,4 +1,4 @@
-package game.gui.screens.common;
+package interfaz.screens.common;
 
 public class ScreenConstants {
 

@@ -1,9 +1,8 @@
-package game.gui.screens.main;
+package interfaz.screens.main;
 
-
-import game.gui.screens.common.BaseScreenController;
-import game.gui.screens.common.ScreenConstants;
-import game.gui.screens.common.Screens;
+import interfaz.screens.common.BaseScreenController;
+import interfaz.screens.common.ScreenConstants;
+import interfaz.screens.common.Screens;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -12,6 +11,7 @@ import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuBar;
@@ -23,11 +23,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainController {
+public class MainController extends BaseScreenController implements Initializable {
 
     final Instance<Object> instance;
 
@@ -60,7 +62,8 @@ public class MainController {
         primaryStage = stage;
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         closeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showAlertConfirmClose());
         minimizeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> ((Stage) root.getScene().getWindow()).setIconified(true));
         alwaysOnTopIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -79,7 +82,7 @@ public class MainController {
             primaryStage.setY(event.getScreenY() + yOffset);
         });
         menuPrincipal.setVisible(true);
-        //cargarPantalla(Screens.LOGIN);
+        cargarPantalla(Screens.INICIO);
     }
 
     public double getWidth() {
@@ -199,5 +202,9 @@ public class MainController {
     }
 
     public void guardar() {
+    }
+
+    public void cargarPantallaJuego() {
+        cargarPantalla(Screens.PANTALLAJUEGO); 
     }
 }

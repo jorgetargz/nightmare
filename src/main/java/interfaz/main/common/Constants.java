@@ -1,4 +1,4 @@
-package game.gui.main.common;
+package interfaz.main.common;
 
 public class Constants {
     public static final String FXML_MAIN_SCREEN_FXML = "/fxml/mainScreen.fxml";

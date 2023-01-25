@@ -1,4 +1,4 @@
-package game.gui.main;
+package interfaz.main;
 
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
@@ -17,8 +17,8 @@ public class DIJavafx extends Application {
 
         SeContainerInitializer initializer = SeContainerInitializer.newInstance();
         final SeContainer container = initializer.initialize();
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(1280);
+        primaryStage.setMinHeight(720);
         primaryStage.setResizable(false);
         container.getBeanManager().fireEvent(primaryStage, new AnnotationLiteral<StartupScene>() {
         });

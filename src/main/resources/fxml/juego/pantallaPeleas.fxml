@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fxml.juego.PantallaPeleas"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
+
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="interfaz.screens.pantallapeleas.PantallaPeleasController">
+    <Label layoutX="168.0" layoutY="145.0" text="Vida mago"/>
+    <Label layoutX="785.0" layoutY="154.0" text="Vida criatura"/>
+    <Label layoutX="168.0" layoutY="188.0" text="Energía mago"/>
+    <ImageView fx:id="imagenMago" fitHeight="150.0" fitWidth="200.0" layoutX="126.0" layoutY="471.0" pickOnBounds="true"
+               preserveRatio="true"/>
+    <ImageView fx:id="imagenCriatura" fitHeight="150.0" fitWidth="200.0" layoutX="705.0" layoutY="447.0"
+               pickOnBounds="true" preserveRatio="true"/>
+    <MFXComboBox fx:id="comboArmas" layoutX="168.0" layoutY="241.0" prefHeight="25.0" prefWidth="200.0"/>
+    <MFXButton fx:id="botonHuir" layoutX="168.0" layoutY="343.0" prefHeight="25.0" prefWidth="200.0" text="Huir"/>
+    <MFXComboBox fx:id="comboHechizos" layoutX="168.0" layoutY="292.0" prefHeight="25.0" prefWidth="200.0"/>
 </AnchorPane>

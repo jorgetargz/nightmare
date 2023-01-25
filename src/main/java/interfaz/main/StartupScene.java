@@ -1,4 +1,4 @@
-package game.gui.main;
+package interfaz.main;
 
 import jakarta.inject.Qualifier;
 

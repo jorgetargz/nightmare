@@ -1,4 +1,4 @@
-package game.gui.screens.common;
+package interfaz.screens.common;
 
 public enum Screens {
 
@@ -14,6 +14,7 @@ public enum Screens {
     RATING_LIST(ScreenConstants.FXML_RATING_LIST_SCREEN_FXML),
     RATING_ADD(ScreenConstants.FXML_RATING_ADD_SCREEN_FXML),
 
+    MAIN("/fxml/mainScreen.fxml"),
     INICIO("/fxml/partida/inicio/pantallaInicio.fxml"),
     CASAPRINCIPAL("/fxml/casaMago/casaPrincipal.fxml"),
     ALMACEN("/fxml/casaMago/almacen.fxml"),
