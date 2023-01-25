@@ -180,11 +180,24 @@ public class MainController {
         showAlertConfirmClose();
     }
 
-    //events launched on other screens
-    public void onLoginHecho() {
-        menuPrincipal.setVisible(true);
-        cargarPantalla(Screens.WELCOME);
+
+    public void generarInforme() {
     }
 
+    public void help() {
+    }
 
+    public void cargarPartidaXML() {
+
+    }
+
+    public void cargarPartidaBBDD() {
+    }
+
+    public void nuevaPartida() {
+        cargarPantalla(Screens.NUEVAPARTIDA);
+    }
+
+    public void guardar() {
+    }
 }

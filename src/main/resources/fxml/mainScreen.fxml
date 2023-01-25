@@ -17,13 +17,18 @@
                 <HBox.margin>
                     <Insets right="200.0" top="20.0"/>
                 </HBox.margin>
-                <Menu fx:id="menuSesion" mnemonicParsing="false" text="Sesion">
-                    <MenuItem fx:id="menuItemPantallaInicio" mnemonicParsing="false" onAction="#menuOnClick"
-                              text="Main"/>
-                    <MenuItem fx:id="menuItemLogout" mnemonicParsing="false" onAction="#logout" text="Close"/>
+                <Menu fx:id="menuOpciones" mnemonicParsing="false" text="Opciones">
+                    <MenuItem fx:id="generarInforme" mnemonicParsing="false" onAction="#generarInforme"
+                              text="Generar Informe"/>
+                    <MenuItem fx:id="help" mnemonicParsing="false" onAction="#help" text="Help"/>
                     <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#exit" text="Salir"/>
-                    <MenuItem fx:id="menuItemModoOscuro" mnemonicParsing="false" onAction="#cambiarcss"
-                              text="Change Theme"/>
+                </Menu>
+                <Menu fx:id="guardar" mnemonicParsing="false" text="Guardar" onAction="#guardar"/>
+                <Menu fx:id="menuCargar" mnemonicParsing="false" text="Partida">
+                    <MenuItem fx:id="xml" mnemonicParsing="false" onAction="#cargarPartidaXML"
+                              text="Cargar XML"/>
+                    <MenuItem fx:id="bbdd" mnemonicParsing="false" onAction="#cargarPartidaBBDD" text="Cargar base de datos"/>
+                    <MenuItem fx:id="nueva" mnemonicParsing="false" onAction="#nuevaPartida" text="Nueva partida"/>
                 </Menu>
             </MenuBar>
             <MFXFontIcon fx:id="alwaysOnTopIcon" description="mfx-lock" size="21.0" styleClass="always-on-top-icon"/>

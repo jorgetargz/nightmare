@@ -1,0 +1,351 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="demiurge">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="dungeon">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="home">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="description" type="xs:string"/>
+                                        <xs:element name="comfort" type="xs:integer"/>
+                                        <xs:element name="singa">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="currentValue" type="xs:integer"/>
+                                                    <xs:element name="maxValue" type="xs:integer"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="chest">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="capacity" type="xs:integer"/>
+                                                    <xs:element name="items">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="item" maxOccurs="unbounded">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="domain" >
+                                                                                <xs:complexType>
+                                                                                    <xs:attribute name="element" type="domainType"/>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element name="level">
+                                                                                <xs:complexType>
+                                                                                    <xs:attribute name="value" type="levelType"/>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                        <xs:attribute name="type" type="typeAttrItem"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="library">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="spells">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="spell" maxOccurs="unbounded">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="domain" >
+                                                                                <xs:complexType>
+                                                                                    <xs:attribute name="element" type="domainType"/>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element name="level">
+                                                                                <xs:complexType>
+                                                                                    <xs:attribute name="value" type="levelType"/>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="rooms">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="room" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="id" type="xs:integer"/>
+                                                    <xs:element name="exit">
+                                                        <xs:complexType>
+                                                            <xs:attribute name="value" type="valueBooleanType"/>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="description" type="xs:string"/>
+                                                    <xs:element name="visited" type="xs:boolean"/>
+                                                    <xs:element name="items">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="item" maxOccurs="unbounded" minOccurs="0">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="domain" >
+                                                                                <xs:complexType>
+                                                                                    <xs:attribute name="element" type="domainType"/>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element name="level">
+                                                                                <xs:complexType>
+                                                                                    <xs:attribute name="value" type="levelType"/>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                        <xs:attribute name="type" type="typeAttrItem"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="creatures">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="creature" maxOccurs="unbounded" minOccurs="0">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="name" type="xs:string"/>
+                                                                            <xs:element name="life" type="xs:integer"/>
+                                                                            <xs:element name="punch" type="xs:integer"/>
+                                                                            <xs:element name="spells">
+                                                                                <xs:complexType>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element name="spell"
+                                                                                                    maxOccurs="unbounded">
+                                                                                            <xs:complexType>
+                                                                                                <xs:sequence>
+                                                                                                    <xs:element name="domain">
+                                                                                                        <xs:complexType>
+                                                                                                            <xs:attribute name="element" type="domainType"/>
+                                                                                                        </xs:complexType>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element name="level">
+                                                                                                        <xs:complexType>
+                                                                                                            <xs:attribute name="value" type="levelType"/>
+                                                                                                        </xs:complexType>
+                                                                                                    </xs:element>
+                                                                                                </xs:sequence>
+                                                                                            </xs:complexType>
+                                                                                        </xs:element>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                        <xs:attribute name="type" type="typeAttrCreature"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="doors">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="door" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="idRoom1" type="xs:integer"/>
+                                                                <xs:element name="idRoom2" type="xs:integer"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="wizard">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="name" type="xs:string"/>
+                            <xs:element name="life">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="currentValue" type="xs:integer"/>
+                                        <xs:element name="maxValue" type="xs:integer"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="energy">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="currentValue" type="xs:integer"/>
+                                        <xs:element name="maxValue" type="xs:integer"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="crystalCarrier">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="capacity" type="xs:integer"/>
+                                        <xs:element name="crystals">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="crystal" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="singa" type="xs:integer"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="weareables">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="weaponsMAX" type="xs:integer"/>
+                                        <xs:element name="necklacesMAX" type="xs:integer"/>
+                                        <xs:element name="ringsMAX" type="xs:integer"/>
+                                        <xs:element name="items">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="item" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="domain" >
+                                                                    <xs:complexType>
+                                                                        <xs:attribute name="element" type="domainType"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                                <xs:element name="level">
+                                                                    <xs:complexType>
+                                                                        <xs:attribute name="value" type="levelType"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                            <xs:attribute name="type" type="typeAttrItem"/>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="jewelryBag">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="capacity" type="xs:integer"/>
+                                        <xs:element name="items">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="item" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="domain" >
+                                                                    <xs:complexType>
+                                                                        <xs:attribute name="element" type="domainType"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                                <xs:element name="level">
+                                                                    <xs:complexType>
+                                                                        <xs:attribute name="value" type="levelType"/>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                            <xs:attribute name="type" type="typeAttrItem"/>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- END CONDITIONS Y ESTAMOS-->
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="conditions">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="condition" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="type" type="typeAttrCondition"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="typeAttrItem">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="necklace"/>
+            <xs:enumeration value="ring"/>
+            <xs:enumeration value="weapon"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="domainType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="energy"/>
+            <xs:enumeration value="fire"/>
+            <xs:enumeration value="electricity"/>
+            <xs:enumeration value="air"/>
+            <xs:enumeration value="life"/>
+            <xs:enumeration value="none"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="levelType">
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="valueBooleanType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeAttrCreature">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="electricity"/>
+            <xs:enumeration value="fire"/>
+            <xs:enumeration value="air"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeAttrCondition">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VisitAllRooms"/>
+            <xs:enumeration value="KillAllCreatures"/>
+            <!-- TODO: ADD MORE CONDITIONS -->
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

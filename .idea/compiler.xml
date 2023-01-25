@@ -9,8 +9,5 @@
         <module name="nightmare" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="nightmare" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

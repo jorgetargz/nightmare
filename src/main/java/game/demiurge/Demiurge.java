@@ -1,42 +1,47 @@
 package game.demiurge;
 
+import game.DungeonLoader;
 import game.character.Wizard;
-import game.dungeon.structure.Dungeon;
-import game.dungeon.structure.Home;
-
-import static wizardNightmare.DungeonConfigValues.*;
+import game.conditions.Condition;
+import game.conditions.SimpleCondition;
+import game.dungeon.Dungeon;
+import game.dungeon.Home;
 
 public class Demiurge {
-    private int day;
+    private int day = 0;
     private Dungeon dungeon;
     private Home home;
     private Wizard wizard;
 
+    DungeonConfiguration dungeonConfiguration = new DungeonConfiguration();
     DemiurgeHomeManager homeManager;
     DemiurgeContainerManager containerManager;
     DemiurgeDungeonManager dungeonManager;
+    DemiurgeEndChecker endChecker;
 
     public Demiurge() {
-        day = 0;
+        endChecker = new DemiurgeEndChecker();
+        endChecker.addCondition(new SimpleCondition());
     }
 
-    public DemiurgeHomeManager getHomeManager() {
-        return homeManager;
+    public void setDungeon(Dungeon dungeon) { this.dungeon = dungeon; }
+    public void setHome(Home home) {
+        this.home = home;
     }
+    public void setWizard(Wizard wizard) {
+        this.wizard = wizard;
+    }
+    public void addCondition(Condition condition){ endChecker.addCondition(condition); }
 
-    public DemiurgeContainerManager getContainerManager() {
-        return containerManager;
-    }
-
-    public DemiurgeDungeonManager getDungeonManager() {
-        return dungeonManager;
-    }
+    public DemiurgeHomeManager getHomeManager() { return homeManager; }
+    public DemiurgeContainerManager getContainerManager() { return containerManager; }
+    public DemiurgeDungeonManager getDungeonManager() { return dungeonManager; }
 
     public void loadEnvironment(DungeonLoader dungeonLoader) {
-        dungeonLoader.load(this);
-        containerManager = new DemiurgeContainerManager(wizard.getWereables(), wizard.getJewelryBag(), home.getContainer());
-        homeManager = new DemiurgeHomeManager(wizard, home);
-        dungeonManager = new DemiurgeDungeonManager(wizard, home, containerManager);
+        dungeonLoader.load(this, dungeonConfiguration);
+        containerManager = new DemiurgeContainerManager(wizard.getWearables(), wizard.getJewelryBag(), home.getContainer());
+        homeManager =  new DemiurgeHomeManager(dungeonConfiguration, wizard, home, containerManager);
+        dungeonManager = new DemiurgeDungeonManager(dungeonConfiguration, wizard, home, containerManager, endChecker);
         nextDay();
     }
 
@@ -45,29 +50,8 @@ public class Demiurge {
     }
 
     public void nextDay() {
-        wizard.sleep(home.getComfort() * COMFORT_MODIFIER_FOR_ENERGY);
-        dungeon.generateCrystals(CRYSTALS_PER_DAY, SINGA_PER_CRYSTAL);
+        wizard.sleep(home.getComfort() * dungeonConfiguration.getComfortModifierForEnergy());
+        dungeon.generateCrystals(dungeonConfiguration.getCrystalsPerDay(), dungeonConfiguration.getSingaPerCrystal());
         day++;
     }
-
-    public void setDungeon(Dungeon dungeon) {
-        this.dungeon = dungeon;
-    }
-
-    public void setHome(Home home) {
-        this.home = home;
-    }
-
-    public void setWizard(Wizard wizard) {
-        this.wizard = wizard;
-    }
-
-    public String homeInfo() {
-        return home.toString();
-    }
-
-    public String wizardInfo() {
-        return wizard.toString();
-    }
-
 }

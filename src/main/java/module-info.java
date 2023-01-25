@@ -11,13 +11,18 @@ module game {
     exports game.util;
     exports game.demiurge;
     exports game.dungeon;
-    exports game.dungeon.spell;
-    exports game.dungeon.structure;
-    exports game.dungeon.structure.exceptions;
-    exports game.dungeon.object.exceptions;
     exports game.character.exceptions;
-    exports game.gui.screens.main;
+    exports game.conditions;
+    exports game.demiurge.exceptions;
+    exports game.spell;
+    exports loaderManual;
+    exports game.spellContainer;
+    exports game.objectContainer.exceptions;
+    exports game.object;
     exports wizardNightmare;
+
+    exports game.gui.main;
+    exports game.gui.screens.main;
 
     opens game.gui.main;
     opens game.gui.main.common;

@@ -1,10 +1,10 @@
 package game.demiurge;
 
-import game.dungeon.object.container.Container;
-import game.dungeon.object.exceptions.ContainerFullException;
-import game.dungeon.object.exceptions.ContainerInvalidExchangeException;
-import game.dungeon.object.exceptions.ContainerUnacceptedItemException;
-import game.dungeon.object.item.Item;
+import game.objectContainer.exceptions.ContainerFullException;
+import game.objectContainer.exceptions.ContainerInvalidExchangeException;
+import game.objectContainer.exceptions.ContainerUnacceptedItemException;
+import game.object.Item;
+import game.objectContainer.Container;
 
 public class DemiurgeContainerManager {
 
@@ -12,27 +12,16 @@ public class DemiurgeContainerManager {
     Container bag;
     Container site;
 
-    DemiurgeContainerManager(Container w, Container b, Container s) {
+    DemiurgeContainerManager(Container w, Container b, Container s){
         wearables = w;
         bag = b;
         site = s;
     }
 
-    public Container getWearables() {
-        return wearables;
-    }
-
-    public Container getBag() {
-        return bag;
-    }
-
-    public Container getSite() {
-        return site;
-    }
-
-    public void setSite(Container site) {
-        this.site = site;
-    }
+    public Container getWearables() { return wearables; }
+    public Container getBag() { return bag; }
+    public Container getSite() { return site; }
+    public void setSite(Container site) { this.site = site; }
 
     public void deleteItem(Container c, int aIndex) {
         c.remove(aIndex);
@@ -48,7 +37,7 @@ public class DemiurgeContainerManager {
         Item aItem = a.get(aIndex);
         Item bItem = a.get(bIndex);
 
-        if (aItem.getClass().equals(bItem.getClass())) {
+        if (aItem.getClass().equals(bItem.getClass())){
             a.remove(aIndex);
             b.remove(bIndex);
 
@@ -57,7 +46,7 @@ public class DemiurgeContainerManager {
                 b.add(aItem);
             } catch (ContainerFullException | ContainerUnacceptedItemException ignored) {
             }
-        } else {
+        }else{
             throw new ContainerInvalidExchangeException();
         }
     }

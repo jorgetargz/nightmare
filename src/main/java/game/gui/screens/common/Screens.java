@@ -12,7 +12,9 @@ public enum Screens {
     READER_DELETE(ScreenConstants.FXML_READER_DELETE_SCREEN_FXML),
     SUBSCRIPTION_LIST(ScreenConstants.FXML_SUBSCRIPTION_LIST_SCREEN_FXML),
     RATING_LIST(ScreenConstants.FXML_RATING_LIST_SCREEN_FXML),
-    RATING_ADD(ScreenConstants.FXML_RATING_ADD_SCREEN_FXML);
+    RATING_ADD(ScreenConstants.FXML_RATING_ADD_SCREEN_FXML),
+
+    NUEVAPARTIDA();
 
     private final String path;
 
