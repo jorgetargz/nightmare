@@ -68,6 +68,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     static List<Spell> LIBRARY_SPELLS = new ArrayList<>();
 
+
     //Wizard
     static int INITIAL_LIFE = 10;
     static int INITIAL_LIFE_MAX = 10;
@@ -82,6 +83,11 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     @Override
     public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) {
+    }
+
+    @Override
+    public void save(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file) {
+
     }
 
 
@@ -133,7 +139,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     }
 
     private static void createHome(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException, ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException, ValueOverMaxException {
-        // GETTING HOME CHILDREN --> [comfort, singa, chest, library]
+        // GETTING HOME CHILDREN --> [description, comfort, singa, chest, library]
         XPathExpression expr = xpath.compile("/demiurge/dungeon/home/*");
         NodeList list = (NodeList) expr.evaluate(baseXML, XPathConstants.NODESET);
         for (int i = 0; i < list.getLength(); i++) {
@@ -364,8 +370,12 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     private static void getHomeSingaValues(Node node) {
         NodeList listSinga = node.getChildNodes();
-        for (int j = 0; j < listSinga.getLength(); j++) {
-            Node nodeSinga = listSinga.item(j);
+        getCurrentValueAndMaxValue(listSinga);
+    }
+
+    private static void getCurrentValueAndMaxValue(NodeList list) {
+        for (int j = 0; j < list.getLength(); j++) {
+            Node nodeSinga = list.item(j);
             if (elNodoEsElemento(nodeSinga)) {
                 switch (getNombre(nodeSinga)) {
                     case "currentValue":
@@ -377,7 +387,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                         INITIAL_SINGA_CAPACITY = Integer.parseInt(nodeSinga.getTextContent());
                         break;
                     default:
-                        throw new IllegalArgumentException("EL NODO DENTRO DE //home/singa/ " + nodeSinga.getNodeName() + " NO ES VALIDO");
+                        throw new IllegalArgumentException("EL NODO DENTRO DE" + nodeSinga.getNodeName() + " NO ES VALIDO");
                 }
             }
         }
