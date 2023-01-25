@@ -1,0 +1,17 @@
+tiempo
+descripcion
+puertas
+criaturas
+objetos para recolectar
+cuadro con singa, cristales, energia y vida
+menu con los objetos que el mago ya posee
+imagen de la habitación donde te encuentras
+
+peleas:
+cuadro vida criatura
+cuadro vida mago
+imagen mago
+imagen criatura
+luchar
+huir
+hechizos

@@ -21,22 +21,13 @@ module game {
     exports game.object;
     exports wizardNightmare;
 
-    exports interfaz.main;
-    exports interfaz.main.common;
-    exports interfaz.screens.common;
-    exports interfaz.screens.main;
-    exports interfaz.screens.pantallainicio;
-    exports interfaz.screens.pantallapeleas;
-    exports interfaz.screens.pantallajuego;
+    exports game.gui.main;
+    exports game.gui.screens.main;
 
-    opens interfaz.main;
-    opens interfaz.main.common;
-    opens interfaz.screens.common;
-    opens interfaz.screens.main to javafx.fxml;
-    opens interfaz.screens.pantallainicio to javafx.fxml;
-    opens interfaz.screens.pantallapeleas to javafx.fxml;
-    opens interfaz.screens.pantallajuego to javafx.fxml;
-
+    opens game.gui.main;
+    opens game.gui.main.common;
+    opens game.gui.screens.main to javafx.fxml;
+    opens game.gui.screens.common;
     opens game.dungeon;
     opens game.util;
 

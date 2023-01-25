@@ -25,5 +25,4 @@ public class JewelryBag extends Container{
         }else
             throw new ContainerUnacceptedItemException();
     }
-
 }
