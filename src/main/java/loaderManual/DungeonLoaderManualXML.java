@@ -4,6 +4,8 @@ import game.Domain;
 import game.DungeonLoaderXML;
 import game.character.Creature;
 import game.character.Wizard;
+import game.conditions.KillAllCreaturesCondition;
+import game.conditions.VisitAllRoomsCondition;
 import game.demiurge.Demiurge;
 import game.demiurge.DungeonConfiguration;
 import game.dungeon.*;
@@ -88,6 +90,9 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     static JewelryBag JEWELRY_BAG_WIZARD;
 
+    static Wearables WEARABLES_WIZARD;
+
+    static JewelryBag JEWELRY_BAG_WIZARD;
 
     @Override
     public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) {
@@ -105,15 +110,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         final File XSDFILE = new File("xml/dungeon_schema.xsd");
         try {
 
-            try {
-                SchemaFactory factory =
-                        SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                Schema schema = factory.newSchema(XSDFILE);
-                Validator validator = schema.newValidator();
-                validator.validate(new StreamSource(XMLFILE));
-            } catch (IOException | SAXException e) {
-                System.out.println("Exception: "+e);
-            }
+            validateAgainstSchema(XMLFILE, XSDFILE);
 
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -130,6 +127,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             createHome(demiurge, baseXML, xpath);
             createRooms(demiurge, baseXML, xpath);
             createWizard(demiurge, baseXML, xpath);
+            createEndConditions(demiurge, baseXML, xpath);
 
 
         } catch (Exception | SpellUnknowableException e) {
@@ -145,6 +143,40 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         } catch (ValueOverMaxException e) {
             // da al improve los valores de un spell
             e.printStackTrace();
+        }
+    }
+
+    private static void createEndConditions(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException {
+        XPathExpression expr = xpath.compile("/demiurge/conditions/*");
+        NodeList conditions = (NodeList) expr.evaluate(baseXML, XPathConstants.NODESET);
+        for (int i = 0; i < conditions.getLength(); i++) {
+            Node condition = conditions.item(i);
+            if (elNodoEsElemento(condition)){
+                switch (getAtributo(condition, "type").toUpperCase()) {
+                    //TODO: ADD MORE END CONDITIONS
+                    case "VISITALLROOMS":
+                        demiurge.addCondition(new VisitAllRoomsCondition(DUNGEON));
+                        break;
+                    case "KILLALLCREATURES":
+                        demiurge.addCondition(new KillAllCreaturesCondition(DUNGEON));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }
+    }
+
+    private static void validateAgainstSchema(File XMLFILE, File XSDFILE) {
+        try {
+            SchemaFactory factory =
+                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(XSDFILE);
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(XMLFILE));
+        } catch (IOException | SAXException e) {
+            System.out.println("Exception: "+e);
         }
     }
 
@@ -367,6 +399,94 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         demiurge.setWizard(wizard);
         System.out.println(wizard);
     }
+    private static void createJewelryBag(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
+//        <capacity>2</capacity>
+//			<items>
+//				<item type="necklace">
+//					<domain element="energy"/>
+//					<level value="1"/>
+//				</item>
+//			</items>
+        int capacity = 0;
+        List<Item> items = new ArrayList<>();
+        NodeList jewelryChilds = node.getChildNodes();
+        for (int j = 0; j < jewelryChilds.getLength(); j++) {
+            Node chestChild = jewelryChilds.item(j);
+            if (elNodoEsElemento(chestChild)) {
+                switch (getNombre(chestChild)) {
+                    case "capacity":
+                        //<weaponsMAX>1</weaponsMAX>
+                        capacity = Integer.parseInt(chestChild.getTextContent());
+                        break;
+                    case "items":
+                        items = getItemsNode(chestChild, "//wizard/weareables/items/");
+                        break;
+                    default:
+                        throw new IllegalArgumentException("NODO NO VÁLIDO EN //wizard/weareables/* : " + getNombre(chestChild));
+                }
+            }
+        }
+        JewelryBag jewelryBag = new JewelryBag(capacity);
+        for (Item item : items) {
+            jewelryBag.add(item);
+        }
+        JEWELRY_BAG_WIZARD = jewelryBag;
+
+    }
+    private static void createWereables(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
+//        <weaponsMAX>1</weaponsMAX>
+//			<necklacesMAX>1</necklacesMAX>
+//			<ringsMAX>2</ringsMAX>
+//			<items>
+//				<item type="necklace">
+//					<domain element="life"/>
+//					<level value="1"/>
+//				</item>
+//				<item type="ring">
+//					<domain element="air"/>
+//					<level value="1"/>
+//				</item>
+//				<item type="weapon">
+//					<domain element="none"/>
+//					<level value="1"/>
+//				</item>
+//			</items>
+        int weaponsMAX = 0;
+        int necklacesMAX = 0;
+        int ringsMAX = 0;
+        List<Item> items = new ArrayList<>();
+        NodeList wereablesChilds = node.getChildNodes();
+        for (int j = 0; j < wereablesChilds.getLength(); j++) {
+            Node chestChild = wereablesChilds.item(j);
+            if (elNodoEsElemento(chestChild)) {
+                switch (getNombre(chestChild)) {
+                    case "weaponsMAX":
+                        //<weaponsMAX>1</weaponsMAX>
+                        weaponsMAX = Integer.parseInt(chestChild.getTextContent());
+                        break;
+                    case "necklacesMAX":
+//                        <necklacesMAX>1</necklacesMAX>
+                        necklacesMAX = Integer.parseInt(chestChild.getTextContent());
+                        break;
+                    case "ringsMAX":
+                        //<weaponsMAX>1</weaponsMAX>
+                        ringsMAX  = Integer.parseInt(chestChild.getTextContent());
+                        break;
+                    case "items":
+                        items = getItemsNode(chestChild, "//wizard/weareables/items/");
+                        break;
+                    default:
+                        throw new IllegalArgumentException("NODO NO VÁLIDO EN //wizard/weareables/* : " + getNombre(chestChild));
+                }
+            }
+        }
+        Wearables wearables = new Wearables(weaponsMAX, necklacesMAX, ringsMAX);
+        for (Item item : items) {
+            wearables.add(item);
+        }
+        WEARABLES_WIZARD = wearables;
+    }
+
     private static void createJewelryBag(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
 //        <capacity>2</capacity>
 //			<items>
