@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39d9059d-a4c6-463a-87ab-a62d22122599" name="Changes" comment="Added report dependencies">
-      <change afterPath="$PROJECT_DIR$/src/main/java/interfaz/screens/casamago/CasaPrincipalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interfaz/screens/main/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interfaz/screens/main/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/casaMago/casaPrincipal.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/casaMago/casaPrincipal.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/juego/pantallaJuego.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/juego/pantallaJuego.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/mainScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/mainScreen.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="39d9059d-a4c6-463a-87ab-a62d22122599" name="Changes" comment="27.01.2023" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -155,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671093232170</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="27.01.2023">
+      <created>1674807351574</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1674807351574</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +172,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Merged v0.2 nightmare project" />
     <MESSAGE value="Added report dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added report dependencies" />
+    <MESSAGE value="27.01.2023" />
+    <option name="LAST_COMMIT_MESSAGE" value="27.01.2023" />
   </component>
 </project>
