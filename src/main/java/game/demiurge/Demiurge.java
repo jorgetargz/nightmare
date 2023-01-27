@@ -37,6 +37,10 @@ public class Demiurge {
     public DemiurgeContainerManager getContainerManager() { return containerManager; }
     public DemiurgeDungeonManager getDungeonManager() { return dungeonManager; }
 
+    public Dungeon getDungeon() { return dungeon; }
+    public Home getHome() { return home; }
+    public Wizard getWizard() { return wizard; }
+
     public void loadEnvironment(DungeonLoader dungeonLoader) {
         dungeonLoader.load(this, dungeonConfiguration);
         containerManager = new DemiurgeContainerManager(wizard.getWearables(), wizard.getJewelryBag(), home.getContainer());
