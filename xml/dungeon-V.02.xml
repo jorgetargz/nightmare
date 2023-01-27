@@ -138,4 +138,5 @@
 		<condition type="VisitAllRooms"/>
 		<condition type="KillAllCreatures"/>
 	</conditions>
+	<day value="2"></day>
 </demiurge>

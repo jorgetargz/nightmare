@@ -4,13 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39d9059d-a4c6-463a-87ab-a62d22122599" name="Changes" comment="pantallaDeJuegoOrganizado">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="39d9059d-a4c6-463a-87ab-a62d22122599" name="Changes" comment="27.01.2023" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,42 +49,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/2dam/Desktop/dam2/PSP/2eva/multimoduloSeguridad",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/2dam/IdeaProjects/nightmare&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn compile" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.DIJavafx">
-    <configuration name="DIJavafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="game.gui.main.DIJavafx" />
-      <module name="nightmare" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="game.gui.main.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.interfaz.main.DIJavafx">
     <configuration name="WizardNightmare" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="wizardNightmare.WizardNightmare" />
       <module name="nightmare" />
@@ -93,9 +85,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="interfaz.main.DIJavafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="interfaz.main.DIJavafx" />
+      <module name="nightmare" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="interfaz.main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.interfaz.main.DIJavafx" />
+      <item itemvalue="Application.WizardNightmare" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.DIJavafx" />
+        <item itemvalue="Application.interfaz.main.DIJavafx" />
         <item itemvalue="Application.WizardNightmare" />
       </list>
     </recent_temporary>
@@ -121,7 +130,6 @@
       <workItem from="1671521366347" duration="702000" />
       <workItem from="1671526340328" duration="26000" />
       <workItem from="1674638492639" duration="2026000" />
-      <workItem from="1674719483890" duration="1214000" />
     </task>
     <task id="LOCAL-00001" summary="Merged v0.2 nightmare project">
       <created>1671011623174</created>
@@ -137,21 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671093232170</updated>
     </task>
-    <task id="LOCAL-00003" summary="pantallaDeJuegoOrganizado">
-      <created>1674650268278</created>
+    <task id="LOCAL-00003" summary="27.01.2023">
+      <created>1674807351574</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1674650268278</updated>
+      <updated>1674807351574</updated>
     </task>
-    <task id="LOCAL-00004" summary="pantallaDeJuegoOrganizado">
-      <created>1674650279592</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1674650279592</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,7 +172,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Merged v0.2 nightmare project" />
     <MESSAGE value="Added report dependencies" />
-    <MESSAGE value="pantallaDeJuegoOrganizado" />
-    <option name="LAST_COMMIT_MESSAGE" value="pantallaDeJuegoOrganizado" />
+    <MESSAGE value="27.01.2023" />
+    <option name="LAST_COMMIT_MESSAGE" value="27.01.2023" />
   </component>
 </project>

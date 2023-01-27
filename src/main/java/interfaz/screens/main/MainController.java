@@ -205,6 +205,6 @@ public class MainController extends BaseScreenController implements Initializabl
     }
 
     public void cargarPantallaJuego() {
-        cargarPantalla(Screens.PANTALLAJUEGO); 
+        cargarPantalla(Screens.PANTALLAJUEGO);
     }
 }
