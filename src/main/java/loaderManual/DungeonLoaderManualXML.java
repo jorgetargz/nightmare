@@ -92,16 +92,6 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     @Override
     public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) {
-    }
-
-    @Override
-    public void save(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file) {
-
-    }
-
-
-    public static void main(String[] args) {
-        Demiurge demiurge = new Demiurge();
         final File XMLFILE = new File("xml/dungeon-V.02.xml");
         final File XSDFILE = new File("xml/dungeon_schema.xsd");
         try {
@@ -140,6 +130,12 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void save(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file) {
+
+    }
+
 
     private static void setDay(Demiurge demiurge, Document baseXML, XPath xpath) {
         try {
@@ -310,7 +306,6 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             newR.setCreature(creature);
         }
         if (visited){ newR.visit(); }
-        //TODO: CrystalCarrier
         ROOMS.add(newR);
     }
 
