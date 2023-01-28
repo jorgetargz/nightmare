@@ -1,5 +1,8 @@
 package interfaz.screens.main;
 
+import game.DungeonLoaderXML;
+import game.demiurge.Demiurge;
+import game.demiurge.DungeonConfiguration;
 import interfaz.screens.common.BaseScreenController;
 import interfaz.screens.common.ScreenConstants;
 import interfaz.screens.common.Screens;
@@ -20,8 +23,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -32,11 +37,14 @@ import java.util.logging.Logger;
 public class MainController extends BaseScreenController implements Initializable {
 
     final Instance<Object> instance;
+    private final DungeonLoaderXML dungeonLoaderXML;
 
     private Stage primaryStage;
     private final Alert alert;
     private double xOffset;
     private double yOffset;
+    private Demiurge demiurge = new Demiurge();
+    private DungeonConfiguration dungeonConfiguration = new DungeonConfiguration();
 
     @FXML
     private BorderPane root;
@@ -53,13 +61,22 @@ public class MainController extends BaseScreenController implements Initializabl
 
 
     @Inject
-    public MainController(Instance<Object> instance) {
+    public MainController(Instance<Object> instance, DungeonLoaderXML dungeonLoaderXML) {
         this.instance = instance;
+        this.dungeonLoaderXML = dungeonLoaderXML;
         alert = new Alert(Alert.AlertType.NONE);
     }
 
     public void setStage(Stage stage) {
         primaryStage = stage;
+    }
+
+    public Demiurge getDemiurge() {
+        return demiurge;
+    }
+
+    public DungeonConfiguration getDungeonConfiguration() {
+        return dungeonConfiguration;
     }
 
     @Override
@@ -150,24 +167,37 @@ public class MainController extends BaseScreenController implements Initializabl
     }
 
 
-    public void generarInforme() {
+    @FXML
+    private void generarInforme() {
     }
 
-    public void help() {
+    @FXML
+    private void help() {
     }
 
-    public void cargarPartidaXML() {
-
+    @FXML
+    private void cargarPartidaXML() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(ScreenConstants.LOAD_XML);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file != null) {
+            dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
+            System.out.println(demiurge.getWizard().getLife());
+        }
     }
 
-    public void cargarPartidaBBDD() {
+    @FXML
+    private void cargarPartidaBBDD() {
     }
 
-    public void nuevaPartida() {
+    @FXML
+    private void nuevaPartida() {
         cargarPantalla(Screens.INICIO);
     }
 
-    public void guardar() {
+    @FXML
+    private void guardar() {
     }
 
     public void cargarPantallaJuego() {

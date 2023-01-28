@@ -3,6 +3,9 @@ package interfaz.screens.common;
 public class ScreenConstants {
 
 
+    public static final String LOAD_XML = "Load XML";
+    public static final String XML_FILES = "XML Files";
+
     private ScreenConstants() {
 
     }

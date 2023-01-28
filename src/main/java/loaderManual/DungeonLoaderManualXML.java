@@ -1,6 +1,7 @@
 package loaderManual;
 
 import game.Domain;
+import game.DungeonLoader;
 import game.DungeonLoaderXML;
 import game.character.Creature;
 import game.character.Wizard;
@@ -91,8 +92,8 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     static JewelryBag JEWELRY_BAG_WIZARD;
 
     @Override
-    public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) {
-        final File XMLFILE = new File("xml/dungeon-V.02.xml");
+    public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File XMLFILE) {
+//        final File XMLFILE = new File("xml/dungeon-V.02.xml");
         final File XSDFILE = new File("xml/dungeon_schema.xsd");
         try {
 
