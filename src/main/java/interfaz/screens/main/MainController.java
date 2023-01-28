@@ -64,6 +64,7 @@ public class MainController extends BaseScreenController implements Initializabl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Window header icons events handlers and window drag
         closeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showAlertConfirmClose());
         minimizeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> ((Stage) root.getScene().getWindow()).setIconified(true));
         alwaysOnTopIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -81,7 +82,8 @@ public class MainController extends BaseScreenController implements Initializabl
             primaryStage.setX(event.getScreenX() + xOffset);
             primaryStage.setY(event.getScreenY() + yOffset);
         });
-        menuPrincipal.setVisible(true);
+
+        // Cargar pantalla de inicio
         cargarPantalla(Screens.INICIO);
     }
 
@@ -114,7 +116,7 @@ public class MainController extends BaseScreenController implements Initializabl
         alert.showAndWait();
     }
 
-    private void cargarPantalla(Screens pantalla) {
+    public void cargarPantalla(Screens pantalla) {
         Pane panePantalla;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -134,27 +136,6 @@ public class MainController extends BaseScreenController implements Initializabl
         switch (((MenuItem) actionEvent.getSource()).getId()) {
             case ScreenConstants.MENU_ITEM_PANTALLA_INICIO -> cargarPantalla(Screens.WELCOME);
             default -> cargarPantalla(Screens.LOGIN);
-        }
-    }
-
-    @FXML
-    private void cambiarcss() {
-        if (primaryStage.getScene().getRoot().getStylesheets().stream().findFirst().isEmpty()
-                || (primaryStage.getScene().getRoot().getStylesheets().stream().findFirst().isPresent()
-                && primaryStage.getScene().getRoot().getStylesheets().stream().findFirst().get().contains(ScreenConstants.STYLE))) {
-            try {
-                primaryStage.getScene().getRoot().getStylesheets().clear();
-                primaryStage.getScene().getRoot().getStylesheets().add(getClass().getResource(ScreenConstants.CSS_DARKMODE_CSS).toExternalForm());
-            } catch (Exception e) {
-                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
-            }
-        } else {
-            try {
-                primaryStage.getScene().getRoot().getStylesheets().clear();
-                primaryStage.getScene().getRoot().getStylesheets().add(getClass().getResource(ScreenConstants.CSS_STYLE_CSS).toExternalForm());
-            } catch (Exception e) {
-                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
-            }
         }
     }
 
