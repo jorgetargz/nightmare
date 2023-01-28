@@ -133,15 +133,6 @@ public class MainController extends BaseScreenController implements Initializabl
     private void menuOnClick(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
             case ScreenConstants.MENU_ITEM_PANTALLA_INICIO -> cargarPantalla(Screens.WELCOME);
-            case ScreenConstants.MENU_ITEM_LIST_NEWSPAPERS -> cargarPantalla(Screens.NEWSPAPER_LIST);
-            case ScreenConstants.MENU_ITEM_DELETE_NEWSPAPERS -> cargarPantalla(Screens.NEWSPAPER_DELETE);
-            case ScreenConstants.MENU_ITEM_LIST_ARTICLES -> cargarPantalla(Screens.ARTICLE_LIST);
-            case ScreenConstants.MENU_ITEM_ADD_ARTICLES -> cargarPantalla(Screens.ARTICLE_ADD);
-            case ScreenConstants.MENU_ITEM_LIST_READERS -> cargarPantalla(Screens.READER_LIST);
-            case ScreenConstants.MENU_ITEM_DELETE_READERS -> cargarPantalla(Screens.READER_DELETE);
-            case ScreenConstants.MENU_ITEM_LIST_SUBSCRIPTIONS -> cargarPantalla(Screens.SUBSCRIPTION_LIST);
-            case ScreenConstants.MENU_ITEM_LIST_RATINGS -> cargarPantalla(Screens.RATING_LIST);
-            case ScreenConstants.MENU_ITEM_ADD_RATINGS -> cargarPantalla(Screens.RATING_ADD);
             default -> cargarPantalla(Screens.LOGIN);
         }
     }
@@ -170,12 +161,6 @@ public class MainController extends BaseScreenController implements Initializabl
     @FXML
     private void acercaDe() {
         showAlert(Alert.AlertType.INFORMATION, ScreenConstants.ABOUT, ScreenConstants.AUTHOR_DATA);
-    }
-
-    @FXML
-    private void logout() {
-        menuPrincipal.setVisible(false);
-        cargarPantalla(Screens.LOGIN);
     }
 
     @FXML
