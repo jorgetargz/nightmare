@@ -30,6 +30,7 @@ module game {
     exports interfaz.screens.pantallajuego;
     exports interfaz.screens.pantallapeleas;
     exports interfaz.screens.casamago;
+    exports interfaz.screens.almacenParaGuardarCambiosPantallas;
 
     opens interfaz.main;
     opens interfaz.main.common;

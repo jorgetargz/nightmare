@@ -3,6 +3,7 @@ package interfaz.screens.main;
 import game.DungeonLoaderXML;
 import game.demiurge.Demiurge;
 import game.demiurge.DungeonConfiguration;
+import interfaz.screens.almacenParaGuardarCambiosPantallas.Reciclaje;
 import interfaz.screens.common.BaseScreenController;
 import interfaz.screens.common.ScreenConstants;
 import interfaz.screens.common.Screens;
@@ -59,12 +60,14 @@ public class MainController extends BaseScreenController implements Initializabl
     @FXML
     private MenuBar menuPrincipal;
 
+    private final Reciclaje reciclaje;
 
     @Inject
-    public MainController(Instance<Object> instance, DungeonLoaderXML dungeonLoaderXML) {
+    public MainController(Instance<Object> instance, DungeonLoaderXML dungeonLoaderXML, Reciclaje reciclaje) {
         this.instance = instance;
         this.dungeonLoaderXML = dungeonLoaderXML;
         alert = new Alert(Alert.AlertType.NONE);
+        this.reciclaje = reciclaje;
     }
 
     public void setStage(Stage stage) {
@@ -183,7 +186,9 @@ public class MainController extends BaseScreenController implements Initializabl
         File file = fileChooser.showOpenDialog(primaryStage);
         if (file != null) {
             dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
-            System.out.println(demiurge.getWizard().getLife());
+            reciclaje.setDungeon(demiurge.getDungeon());
+            reciclaje.setWizard(demiurge.getWizard());
+            reciclaje.setHome(demiurge.getHome());
         }
     }
 
