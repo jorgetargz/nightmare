@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.screens.pantallainicio.PantallaInicioController">
-    <Label layoutX="286.0" layoutY="183.0" text="Inicioooooo " />
-    <Label layoutX="232.0" layoutY="263.0" text="Bienvenido a la mazmorra jefe" />
+    <Label layoutX="286.0" layoutY="183.0" text="Carga una mazmorra en el menu partida" />
+    <Label layoutX="232.0" layoutY="263.0" text="Pulsa el boton para empezar la partida" />
    <MFXButton layoutX="292.0" layoutY="320.0" mnemonicParsing="false" text="tira palante" onAction="#empezarPartida" />
 </AnchorPane>

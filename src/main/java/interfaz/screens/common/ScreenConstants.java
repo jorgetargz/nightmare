@@ -5,6 +5,8 @@ public class ScreenConstants {
 
     public static final String LOAD_XML = "Load XML";
     public static final String XML_FILES = "XML Files";
+    public static final String ERROR = "Error";
+    public static final String ERROR_LOADING_XML = "Error loading XML";
 
     private ScreenConstants() {
 

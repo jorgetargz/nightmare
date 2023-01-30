@@ -187,12 +187,13 @@ public class MainController extends BaseScreenController implements Initializabl
     private void cargarPartidaXML() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(ScreenConstants.LOAD_XML);
+        fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
         File file = fileChooser.showOpenDialog(primaryStage);
         if (file != null) {
             dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
-            System.out.println(demiurge.getWizard());
-            setCurrentRoom(-1);
+        } else {
+            showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, ScreenConstants.ERROR_LOADING_XML);
         }
     }
 
