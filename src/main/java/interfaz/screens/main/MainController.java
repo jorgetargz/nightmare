@@ -233,4 +233,8 @@ public class MainController extends BaseScreenController implements Initializabl
     public void goToCasaMago() {
         cargarPantalla(Screens.CASA);
     }
+
+    public void cargarPantallaPelea() {
+        cargarPantalla(Screens.PANTALLAPELEAS);
+    }
 }
