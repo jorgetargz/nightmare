@@ -30,6 +30,7 @@
                     <MenuItem fx:id="bbdd" mnemonicParsing="false" onAction="#cargarPartidaBBDD"
                               text="Cargar base de datos"/>
                     <MenuItem fx:id="nueva" mnemonicParsing="false" onAction="#nuevaPartida" text="Nueva partida"/>
+                    <MenuItem fx:id="casaMago" mnemonicParsing="false" onAction="#goToCasaMago" text="Casa mago"/>
                 </Menu>
                 <Menu fx:id="acercaDe" mnemonicParsing="false" text="Acerca de">
                     <MenuItem fx:id="acercaDeItem" mnemonicParsing="false" onAction="#acercaDe" text="Acerca de"/>

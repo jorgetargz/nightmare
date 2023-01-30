@@ -1,8 +1,8 @@
 package interfaz.screens.main;
 
+import game.DungeonLoader;
 import game.DungeonLoaderXML;
-import game.demiurge.Demiurge;
-import game.demiurge.DungeonConfiguration;
+import game.demiurge.*;
 import interfaz.screens.common.BaseScreenController;
 import interfaz.screens.common.ScreenConstants;
 import interfaz.screens.common.Screens;
@@ -112,10 +112,6 @@ public class MainController extends BaseScreenController implements Initializabl
         cargarPantalla(Screens.INICIO);
     }
 
-    public double getWidth() {
-        return root.getScene().getWindow().getWidth();
-    }
-
     private void showAlertConfirmClose() {
         Alert alertCerrar = new Alert(Alert.AlertType.WARNING);
         alertCerrar.getButtonTypes().remove(ButtonType.OK);
@@ -159,8 +155,9 @@ public class MainController extends BaseScreenController implements Initializabl
     @FXML
     private void menuOnClick(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
-            case ScreenConstants.MENU_ITEM_PANTALLA_INICIO -> cargarPantalla(Screens.WELCOME);
-            default -> cargarPantalla(Screens.LOGIN);
+            default -> {
+                cargarPantalla(Screens.INICIO);
+            }
         }
     }
 
@@ -190,11 +187,20 @@ public class MainController extends BaseScreenController implements Initializabl
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
         File file = fileChooser.showOpenDialog(primaryStage);
-        if (file != null) {
-            dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
-        } else {
+        if (file == null) {
+            file = new File("xml/dungeon-V.02.xml");
             showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, ScreenConstants.ERROR_LOADING_XML);
         }
+        loadManagers(file);
+    }
+
+    private void loadManagers(File file) {
+        demiurge.loadEnvironment(new DungeonLoader() {
+            @Override
+            public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration) {
+                dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
+            }
+        });
     }
 
     @FXML
@@ -208,9 +214,23 @@ public class MainController extends BaseScreenController implements Initializabl
 
     @FXML
     private void guardar() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(ScreenConstants.SAVE_XML);
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+            dungeonLoaderXML.save(demiurge, dungeonConfiguration, file);
+        } else {
+            showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, ScreenConstants.ERROR_SAVING_XML);
+        }
     }
 
     public void cargarPantallaJuego() {
-        cargarPantalla(Screens.PANTALLAJUEGO);
+        cargarPantalla(Screens.CASA);
+    }
+
+    public void goToCasaMago() {
+        cargarPantalla(Screens.CASA);
     }
 }
