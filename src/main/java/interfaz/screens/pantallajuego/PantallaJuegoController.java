@@ -1,6 +1,6 @@
 package interfaz.screens.pantallajuego;
 
-import interfaz.screens.almacenParaGuardarCambiosPantallas.Reciclaje;
+import game.demiurge.Demiurge;
 import interfaz.screens.common.BaseScreenController;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
 public class PantallaJuegoController extends BaseScreenController {
 
     private final PantallaJuegoViewModel viewModel;
-    private final Reciclaje reciclaje;
 
     @FXML
     public Label labelTiempo;
@@ -31,18 +30,23 @@ public class PantallaJuegoController extends BaseScreenController {
     @FXML
     public ImageView imagenFondo;
 
+    private Demiurge demiurge;
+
     @Inject
-    public PantallaJuegoController(PantallaJuegoViewModel viewModel, Reciclaje reciclaje) {
+    public PantallaJuegoController(PantallaJuegoViewModel viewModel) {
         this.viewModel = viewModel;
-        this.reciclaje = reciclaje;
     }
 
     public void initialize() {
-        singa.setText("Singa: " + reciclaje.getHome().getSinga());
-        energia.setText("Energía: " + reciclaje.getWizard().getEnergy() + "/" + reciclaje.getWizard().getEnergyMax());
-        vida.setText("Vida: " + reciclaje.getWizard().getLife() + "/" + reciclaje.getWizard().getLifeMax());
-        descrpicion.setText(reciclaje.getDungeon().getRoom(reciclaje.getCurrentRoom()).getDescription());
+
     }
 
-
+    @Override
+    public void principalCargado() {
+       demiurge = getPrincipalController().getDemiurge();
+        singa.setText("Singa: " + demiurge.getHome().getSinga());
+        energia.setText("Energía: " + demiurge.getWizard().getEnergy() + "/" + demiurge.getWizard().getEnergyMax());
+        vida.setText("Vida: " + demiurge.getWizard().getLife() + "/" + demiurge.getWizard().getLifeMax());
+        descrpicion.setText(demiurge.getDungeon().getRoom(demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).getID()).getDescription());
+    }
 }

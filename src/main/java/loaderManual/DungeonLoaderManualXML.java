@@ -1,7 +1,6 @@
 package loaderManual;
 
 import game.Domain;
-import game.DungeonLoader;
 import game.DungeonLoaderXML;
 import game.character.Creature;
 import game.character.Wizard;
@@ -34,7 +33,10 @@ import javax.xml.validation.Validator;
 import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -596,14 +598,6 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                 default:
                     throw new IllegalArgumentException("NODO NO VÁLIDO EN //home/* : " + getNombre(node));
             }
-
-
-//                    if (i%2 == 1) {
-//                        System.out.println(node.getNodeName() + ": " + getAtributo(node, "value"));
-//                    } else {
-//                        System.out.println(node.getNodeName() + ": " + getAtributo(node, "element"));
-//                    }
-// SOUT                System.out.println(node.getNodeName());
         }
         HOME = new Home(DESCRIPTION_HOME, INITIAL_COMFORT_HOME, INITIAL_SINGA_HOME, INITIAL_SINGA_CAPACITY_HOME, CHEST_HOME, LIBRARY_HOME);
         demiurge.setHome(HOME);

@@ -30,14 +30,13 @@ module game {
     exports interfaz.screens.pantallajuego;
     exports interfaz.screens.pantallapeleas;
     exports interfaz.screens.casamago;
-    exports interfaz.screens.almacenParaGuardarCambiosPantallas;
 
     opens interfaz.main;
     opens interfaz.main.common;
     opens interfaz.screens.main;
     opens interfaz.screens.common;
     opens interfaz.screens.pantallainicio to javafx.fxml;
-    opens interfaz.screens.pantallajuego to javafx.fxml;
+    opens interfaz.screens.pantallajuego;
     opens interfaz.screens.pantallapeleas to javafx.fxml;
     opens interfaz.screens.casamago to javafx.fxml;
     opens game.dungeon;
