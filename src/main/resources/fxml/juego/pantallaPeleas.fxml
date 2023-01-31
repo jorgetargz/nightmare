@@ -18,6 +18,7 @@
     <ImageView fx:id="imagenCriatura" fitHeight="150.0" fitWidth="200.0" layoutX="705.0" layoutY="447.0"
                pickOnBounds="true" preserveRatio="true"/>
     <MFXComboBox fx:id="comboArmas" layoutX="168.0" layoutY="241.0" prefHeight="25.0" prefWidth="200.0"/>
-    <MFXButton fx:id="botonHuir" layoutX="168.0" layoutY="343.0" prefHeight="25.0" prefWidth="200.0" text="Huir"/>
+    <MFXButton fx:id="botonHuir" layoutX="168.0" layoutY="343.0" prefHeight="25.0" prefWidth="200.0" text="Huir" onAction="#huir"/>
     <MFXComboBox fx:id="comboHechizos" layoutX="168.0" layoutY="292.0" prefHeight="25.0" prefWidth="200.0"/>
+    <MFXButton fx:id="botonVolverSala" layoutX="168.0" layoutY="343.0" prefHeight="25.0" prefWidth="200.0" text="Volver a la sala"/>
 </AnchorPane>
