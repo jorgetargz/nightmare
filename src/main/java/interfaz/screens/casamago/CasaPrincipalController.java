@@ -1,5 +1,6 @@
 package interfaz.screens.casamago;
 
+import game.character.exceptions.WizardNotEnoughEnergyException;
 import game.character.exceptions.WizardTiredException;
 import game.demiurge.Demiurge;
 import game.demiurge.DemiurgeHomeManager;
@@ -29,7 +30,7 @@ public class CasaPrincipalController extends BaseScreenController {
     }
 
     private void loadWizardInfo() {
-        wizardInfoLabel.setText("Bienvenido, " + demiurge.getWizard().toString() + ".");
+        wizardInfoLabel.setText("Bienvenido, " + demiurge.getDungeonManager().wizardInfo() + ".");
     }
 
     @FXML
@@ -105,12 +106,64 @@ public class CasaPrincipalController extends BaseScreenController {
                             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fusionar cristales", "No tienes cristales para fusionar.");
                         } catch (ContainerErrorException e) {
                             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fusionar cristales", "No se ha podido fusionar el cristal.");
-                        }  catch (WizardTiredException e) {
+                        } catch (WizardTiredException e) {
                             sleep();
                         }
                         loadWizardInfo();
                     });
         }
-
     }
+
+    @FXML
+    private void upgradeMaxLife() {
+        try {
+            demiurge.getHomeManager().upgradeLifeMax();
+        } catch (HomeNotEnoughSingaException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade max life", "No tienes suficiente singa.");
+        } catch (WizardNotEnoughEnergyException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade max life", "No tienes suficiente energía.");
+        } catch (WizardTiredException e) {
+            sleep();
+        }
+    }
+
+    @FXML
+    private void upgradeEnergyMax() {
+        try {
+            demiurge.getHomeManager().upgradeEnergyMax();
+        } catch (HomeNotEnoughSingaException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade max energy", "No tienes suficiente singa.");
+        } catch (WizardNotEnoughEnergyException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade max energy", "No tienes suficiente energía.");
+        } catch (WizardTiredException e) {
+            sleep();
+        }
+    }
+
+    @FXML
+    private void upgradeComfort() {
+        try {
+            demiurge.getHomeManager().upgradeComfort();
+        } catch (HomeNotEnoughSingaException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade comfort", "No tienes suficiente singa.");
+        } catch (WizardNotEnoughEnergyException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade comfort", "No tienes suficiente energía.");
+        } catch (WizardTiredException e) {
+            sleep();
+        }
+    }
+
+    @FXML
+    private void upgradeSingaMax() {
+        try {
+            demiurge.getHomeManager().upgradeSingaMax();
+        } catch (HomeNotEnoughSingaException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade max singa", "No tienes suficiente singa.");
+        } catch (WizardNotEnoughEnergyException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Upgrade max singa", "No tienes suficiente energía.");
+        } catch (WizardTiredException e) {
+            sleep();
+        }
+    }
+
 }
