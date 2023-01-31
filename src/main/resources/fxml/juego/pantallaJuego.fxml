@@ -2,10 +2,9 @@
 
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.screens.pantallajuego.PantallaJuegoController">
     <Label fx:id="labelTiempo" layoutX="10.0" layoutY="10.0" text="tiempo" />
     <Label fx:id="descripcion" layoutX="470.0" layoutY="19.0" text="Descripción de la sala">
@@ -22,6 +21,7 @@
     <Label fx:id="vida" layoutX="1044.0" layoutY="186.0" text="Vida" />
    <MFXButton layoutX="1129.0" layoutY="572.0" mnemonicParsing="false" onAction="#gatherCrystals" text="Recoger cristales" />
    <MFXButton layoutX="1129.0" layoutY="618.0" mnemonicParsing="false" onAction="#manageInventory" text="Manejar inventario" />
+    <MFXButton fx:id="botonPelea" layoutX="1129.0" layoutY="28.0" mnemonicParsing="false" onAction="#cargarPelea" text="Luchar" />
    <MFXButton fx:id="firstRoom" layoutX="1349.0" layoutY="315.0" mnemonicParsing="false" text="Sala 1" onAction="#recargarPantallaFromButt1"/>
    <MFXButton fx:id="secondRoom" layoutX="1349.0" layoutY="357.0" mnemonicParsing="false" text="Sala 2" onAction="#recargarPantallaFromButt2"/>
    <MFXButton fx:id="thirdRoom" layoutX="1349.0" layoutY="396.0" mnemonicParsing="false" text="Sala 3" onAction="#recargarPantallaFromButt3"/>

@@ -1,6 +1,5 @@
 package interfaz.screens.pantallajuego;
 
-import console.ConsoleContainerManager;
 import game.Domain;
 import game.character.Creature;
 import game.demiurge.Demiurge;
@@ -15,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -51,6 +49,8 @@ public class PantallaJuegoController extends BaseScreenController {
     public MFXButton thirdRoom;
     @FXML
     public MFXButton fourthRoom;
+    @FXML
+    public MFXButton botonPelea;
 
     Room currentRoom;
     int numberOfDoors;
@@ -95,14 +95,17 @@ public class PantallaJuegoController extends BaseScreenController {
                 case FIRE -> loadImage("/images/criaturas/criatura_04.png", imagenCriatura);
                 case AIR -> loadImage("/images/criaturas/criatura_05.png", imagenCriatura);
             }
-            try {
-                Thread.sleep(2000);
-                cargarPelea();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            botonPelea.setDisable(false);
+//            try {
+//                Thread.sleep(2000);
+//                cargarPelea();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            //TODO: Cargar pelea
         } else {
             imagenCriatura.setImage(null);
+            botonPelea.setDisable(true);
         }
         numberOfDoors = currentRoom.getNumberOfDoors();
         firstRoom.setVisible(numberOfDoors < 1);
@@ -135,6 +138,15 @@ public class PantallaJuegoController extends BaseScreenController {
     }
 
     public void gatherCrystals() {
+        //check if there are crystals in the room
+        if (demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).isEmpty()) {
+            getPrincipalController().showAlert(Alert.AlertType.ERROR, "¡No hay cristales!", "No hay cristales en esta sala");
+        } else {
+            demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).gather();
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "¡Has recogido cristales!", "Cristales recogidos!");
+            cristales.setText("Cristales: " + demiurge.getWizard().getCrystalCarrier().size());
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "¡Has recogido cristales!", "Cristales recogidos!");
+        }
         demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).gather();
         getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "¡Has recogido cristales!", "Cristales recogidos!");
     }
@@ -152,19 +164,19 @@ public class PantallaJuegoController extends BaseScreenController {
         // 7. exchange between wizard and jewelry bag
     }
 
-    private void cargarPelea() {
-        Creature c = currentRoom.getCreature();
-
-        if (c != null && c.getLife() > 0) {  // importante, cuando se vuelva de la pantalla pelea criatura vida = 0
-            JOptionPane.showMessageDialog(null, "You, wizard, must fight with " + c.getName() + " !", "Fight!", JOptionPane.WARNING_MESSAGE);
-            try {
-                Thread.sleep(2000);
-                getPrincipalController().cargarPantallaPelea();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void cargarPelea() {
+//        Creature c = currentRoom.getCreature();
+//
+//        if (c != null && c.getLife() > 0) {
+//            JOptionPane.showMessageDialog(null, "You, wizard, must fight with " + c.getName() + " !", "Fight!", JOptionPane.WARNING_MESSAGE);
+//            try {
+//                Thread.sleep(2000);
+//                getPrincipalController().cargarPantallaPelea();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     private void recargarPantalla(int roomId) { // general method
         getPrincipalController().setCurrentRoom(roomId);
@@ -214,5 +226,12 @@ public class PantallaJuegoController extends BaseScreenController {
             }
         }
         return idRoom;
+    }
+
+    public void cargarPelea() {
+        Creature c = currentRoom.getCreature();
+        if (c != null && c.getLife() > 0) {
+            getPrincipalController().cargarPantallaPelea();
+        }
     }
 }

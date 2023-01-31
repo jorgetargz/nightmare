@@ -1,13 +1,17 @@
 package interfaz.screens.pantallapeleas;
 
 import game.Domain;
+import game.actions.Attack;
 import game.character.Creature;
+import game.character.exceptions.CharacterKilledException;
+import game.character.exceptions.WizardNotEnoughEnergyException;
+import game.character.exceptions.WizardTiredException;
 import game.demiurge.Demiurge;
 import interfaz.screens.common.BaseScreenController;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -19,8 +23,12 @@ import java.util.logging.Logger;
 public class PantallaPeleasController extends BaseScreenController {
 
     private Demiurge demiurge = null;
-    
-    private ObjectProperty<Boolean> isWizardTurn;
+
+    private final ObjectProperty<Boolean> isWizardTurn;
+
+    public PantallaPeleasController() {
+        isWizardTurn = new SimpleObjectProperty<>(true);
+    }
 
     @FXML
     private ImageView imagenMago;
@@ -34,17 +42,46 @@ public class PantallaPeleasController extends BaseScreenController {
     @FXML
     private MFXButton botonVolverSala;
 
+    @FXML
+    private MFXButton botonAtacar;
+
+    @FXML
+    private MFXComboBox<Attack> comboAtaques;
+
     @Override
     public void principalCargado() {
         demiurge = getPrincipalController().getDemiurge();
         setUpCreature();
-        isWizardTurn.addListener ((observableValue, oldState, newState) -> {
+        demiurge.getWizard().getAttacksIterator().forEachRemaining(attack -> comboAtaques.getItems().add(attack));
+
+        isWizardTurn.addListener((observableValue, oldState, newState) -> {
             if (newState) {
-                
-            } else  {
-                
+                wizardTurn();
+            } else {
+                creatureTurn();
             }
         });
+    }
+
+    private void wizardTurn() {
+        botonHuir.setDisable(false);
+        botonVolverSala.setDisable(false);
+        botonAtacar.setDisable(false);
+        comboAtaques.setDisable(false);
+    }
+
+    private void creatureTurn() {
+        botonHuir.setDisable(true);
+        botonVolverSala.setDisable(true);
+        botonAtacar.setDisable(true);
+        comboAtaques.setDisable(true);
+        try {
+            demiurge.getDungeonManager().creatureAttack();
+            isWizardTurn.set(true);
+        } catch (CharacterKilledException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fin de la pelea", "El mago ha muerto");
+            getPrincipalController().goToCasaMago();
+        }
     }
 
     private void setUpCreature() {
@@ -61,6 +98,7 @@ public class PantallaPeleasController extends BaseScreenController {
         } else {
             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "error", "La sala no tiene una criatura");
         }
+        demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).getCreature().view();
         isWizardTurn.set(true);
     }
 
@@ -78,14 +116,29 @@ public class PantallaPeleasController extends BaseScreenController {
         if (demiurge.getDungeonManager().canRunAway()) {
             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fin de la pelea", "Has escapado de la pelea");
             getPrincipalController().cargarPantallaJuego();
-
-
-            // TODO: 21.00 hacer la pelea entera jejeje
+        } else {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "No se ha podido huir", "No se ha podido huir de la pelea\nTurno de la criatura");
+            isWizardTurn.set(false);
         }
 
     }
 
-
-    //run
-    //attack --> selectAttack
+    public void realizarAtaque() {
+        if (comboAtaques.getValue() == null) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "No se ha podido atacar", "No se ha podido atacar\nNo has seleccionado un ataque");
+        } else {
+            try {
+                demiurge.getDungeonManager().wizardAttack(comboAtaques.getValue());
+                isWizardTurn.set(false);
+            } catch (WizardTiredException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "No se ha podido atacar", "No se ha podido atacar\nEl mago está cansado");
+            } catch (WizardNotEnoughEnergyException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "No se ha podido atacar", "No se ha podido atacar\nEl mago no tiene suficiente energía");
+            } catch (CharacterKilledException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fin de la pelea", "Has matado a la criatura");
+                demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).setCreature(null);
+                getPrincipalController().cargarPantallaJuego();
+            }
+        }
+    }
 }
