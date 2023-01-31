@@ -22,15 +22,18 @@ public class CasaPrincipalController extends BaseScreenController {
 
     @FXML
     private Label wizardInfoLabel;
+    @FXML
+    private Label homeInfoLabel;
 
     @Override
     public void principalCargado() {
         demiurge = getPrincipalController().getDemiurge();
-        loadWizardInfo();
+        loadInfo();
     }
 
-    private void loadWizardInfo() {
+    private void loadInfo() {
         wizardInfoLabel.setText("Bienvenido, " + demiurge.getDungeonManager().wizardInfo() + ".");
+        homeInfoLabel.setText(demiurge.getHomeManager().homeInfo());
     }
 
     @FXML
@@ -72,7 +75,7 @@ public class CasaPrincipalController extends BaseScreenController {
                         } catch (WizardTiredException e) {
                             sleep();
                         }
-                        loadWizardInfo();
+                        loadInfo();
                     });
         }
     }
@@ -109,7 +112,7 @@ public class CasaPrincipalController extends BaseScreenController {
                         } catch (WizardTiredException e) {
                             sleep();
                         }
-                        loadWizardInfo();
+                        loadInfo();
                     });
         }
     }
