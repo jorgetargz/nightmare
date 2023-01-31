@@ -22,10 +22,9 @@
     <Label fx:id="vida" layoutX="1044.0" layoutY="186.0" text="Vida" />
    <MFXButton layoutX="1129.0" layoutY="572.0" mnemonicParsing="false" onAction="#gatherCrystals" text="Recoger cristales" />
    <MFXButton layoutX="1129.0" layoutY="618.0" mnemonicParsing="false" onAction="#manageInventory" text="Manejar inventario" />
-   <MFXButton fx:id="botonLucha" layoutX="1163.0" layoutY="668.0" mnemonicParsing="false" onAction="#cargarPelea" text="Luchar" />
-   <MFXButton fx:id="firstRoom" layoutX="1349.0" layoutY="315.0" mnemonicParsing="false" text="Sala 1" />
-   <MFXButton fx:id="secondRoom" layoutX="1349.0" layoutY="357.0" mnemonicParsing="false" text="Sala 2" />
-   <MFXButton fx:id="thirdRoom" layoutX="1349.0" layoutY="396.0" mnemonicParsing="false" text="Sala 3" />
-   <MFXButton fx:id="fourthRoom" layoutX="1349.0" layoutY="439.0" mnemonicParsing="false" text="Sala 4" />
+   <MFXButton fx:id="firstRoom" layoutX="1349.0" layoutY="315.0" mnemonicParsing="false" text="Sala 1" onAction="#recargarPantallaFromButt1"/>
+   <MFXButton fx:id="secondRoom" layoutX="1349.0" layoutY="357.0" mnemonicParsing="false" text="Sala 2" onAction="#recargarPantallaFromButt2"/>
+   <MFXButton fx:id="thirdRoom" layoutX="1349.0" layoutY="396.0" mnemonicParsing="false" text="Sala 3" onAction="#recargarPantallaFromButt3"/>
+   <MFXButton fx:id="fourthRoom" layoutX="1349.0" layoutY="439.0" mnemonicParsing="false" text="Sala 4" onAction="#recargarPantallaFromButt4" />
 
 </AnchorPane>
