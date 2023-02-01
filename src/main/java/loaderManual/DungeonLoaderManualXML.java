@@ -92,16 +92,16 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
 
     @Override
     public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) {
-        final File XMLFILE = new File("xml/dungeon-V.02.xml");
+//        final File XMLFILE = new File("xml/dungeon-V.02.xml"); <-- Fichero de prueba
         final File XSDFILE = new File("xml/dungeon_schema.xsd");
         try {
 
-            validateAgainstSchema(XMLFILE, XSDFILE);
+            validateAgainstSchema(xmlFile, XSDFILE);
 
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document baseXML = dBuilder.parse(XMLFILE);
+            Document baseXML = dBuilder.parse(xmlFile);
             baseXML.getDocumentElement().normalize();
             System.out.println(baseXML.getFirstChild());
 
