@@ -36,6 +36,12 @@ public class Demiurge {
     public DemiurgeHomeManager getHomeManager() { return homeManager; }
     public DemiurgeContainerManager getContainerManager() { return containerManager; }
     public DemiurgeDungeonManager getDungeonManager() { return dungeonManager; }
+    public DemiurgeEndChecker getEndChecker() {
+        return endChecker; }
+
+    public Dungeon getDungeon() { return dungeon; }
+    public Home getHome() { return home; }
+    public Wizard getWizard() { return wizard; }
 
     public void loadEnvironment(DungeonLoader dungeonLoader) {
         dungeonLoader.load(this, dungeonConfiguration);

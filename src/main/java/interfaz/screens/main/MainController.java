@@ -1,5 +1,8 @@
 package interfaz.screens.main;
 
+import game.DungeonLoader;
+import game.DungeonLoaderXML;
+import game.demiurge.*;
 import interfaz.screens.common.BaseScreenController;
 import interfaz.screens.common.ScreenConstants;
 import interfaz.screens.common.Screens;
@@ -20,8 +23,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -32,11 +37,23 @@ import java.util.logging.Logger;
 public class MainController extends BaseScreenController implements Initializable {
 
     final Instance<Object> instance;
+    private final DungeonLoaderXML dungeonLoaderXML;
 
     private Stage primaryStage;
     private final Alert alert;
     private double xOffset;
     private double yOffset;
+    private Demiurge demiurge = new Demiurge();
+    private DungeonConfiguration dungeonConfiguration = new DungeonConfiguration();
+    private int currentRoom;
+
+    public int getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public void setCurrentRoom(int currentRoom) {
+        this.currentRoom = currentRoom;
+    }
 
     @FXML
     private BorderPane root;
@@ -51,10 +68,10 @@ public class MainController extends BaseScreenController implements Initializabl
     @FXML
     private MenuBar menuPrincipal;
 
-
     @Inject
-    public MainController(Instance<Object> instance) {
+    public MainController(Instance<Object> instance, DungeonLoaderXML dungeonLoaderXML) {
         this.instance = instance;
+        this.dungeonLoaderXML = dungeonLoaderXML;
         alert = new Alert(Alert.AlertType.NONE);
     }
 
@@ -62,8 +79,17 @@ public class MainController extends BaseScreenController implements Initializabl
         primaryStage = stage;
     }
 
+    public Demiurge getDemiurge() {
+        return demiurge;
+    }
+
+    public DungeonConfiguration getDungeonConfiguration() {
+        return dungeonConfiguration;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Window header icons events handlers and window drag
         closeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> showAlertConfirmClose());
         minimizeIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> ((Stage) root.getScene().getWindow()).setIconified(true));
         alwaysOnTopIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -81,12 +107,9 @@ public class MainController extends BaseScreenController implements Initializabl
             primaryStage.setX(event.getScreenX() + xOffset);
             primaryStage.setY(event.getScreenY() + yOffset);
         });
-        menuPrincipal.setVisible(true);
-        cargarPantalla(Screens.INICIO);
-    }
 
-    public double getWidth() {
-        return root.getScene().getWindow().getWidth();
+        // Cargar pantalla de inicio
+        cargarPantalla(Screens.INICIO);
     }
 
     private void showAlertConfirmClose() {
@@ -114,7 +137,7 @@ public class MainController extends BaseScreenController implements Initializabl
         alert.showAndWait();
     }
 
-    private void cargarPantalla(Screens pantalla) {
+    public void cargarPantalla(Screens pantalla) {
         Pane panePantalla;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -132,37 +155,8 @@ public class MainController extends BaseScreenController implements Initializabl
     @FXML
     private void menuOnClick(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
-            case ScreenConstants.MENU_ITEM_PANTALLA_INICIO -> cargarPantalla(Screens.WELCOME);
-            case ScreenConstants.MENU_ITEM_LIST_NEWSPAPERS -> cargarPantalla(Screens.NEWSPAPER_LIST);
-            case ScreenConstants.MENU_ITEM_DELETE_NEWSPAPERS -> cargarPantalla(Screens.NEWSPAPER_DELETE);
-            case ScreenConstants.MENU_ITEM_LIST_ARTICLES -> cargarPantalla(Screens.ARTICLE_LIST);
-            case ScreenConstants.MENU_ITEM_ADD_ARTICLES -> cargarPantalla(Screens.ARTICLE_ADD);
-            case ScreenConstants.MENU_ITEM_LIST_READERS -> cargarPantalla(Screens.READER_LIST);
-            case ScreenConstants.MENU_ITEM_DELETE_READERS -> cargarPantalla(Screens.READER_DELETE);
-            case ScreenConstants.MENU_ITEM_LIST_SUBSCRIPTIONS -> cargarPantalla(Screens.SUBSCRIPTION_LIST);
-            case ScreenConstants.MENU_ITEM_LIST_RATINGS -> cargarPantalla(Screens.RATING_LIST);
-            case ScreenConstants.MENU_ITEM_ADD_RATINGS -> cargarPantalla(Screens.RATING_ADD);
-            default -> cargarPantalla(Screens.LOGIN);
-        }
-    }
-
-    @FXML
-    private void cambiarcss() {
-        if (primaryStage.getScene().getRoot().getStylesheets().stream().findFirst().isEmpty()
-                || (primaryStage.getScene().getRoot().getStylesheets().stream().findFirst().isPresent()
-                && primaryStage.getScene().getRoot().getStylesheets().stream().findFirst().get().contains(ScreenConstants.STYLE))) {
-            try {
-                primaryStage.getScene().getRoot().getStylesheets().clear();
-                primaryStage.getScene().getRoot().getStylesheets().add(getClass().getResource(ScreenConstants.CSS_DARKMODE_CSS).toExternalForm());
-            } catch (Exception e) {
-                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
-            }
-        } else {
-            try {
-                primaryStage.getScene().getRoot().getStylesheets().clear();
-                primaryStage.getScene().getRoot().getStylesheets().add(getClass().getResource(ScreenConstants.CSS_STYLE_CSS).toExternalForm());
-            } catch (Exception e) {
-                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
+            default -> {
+                cargarPantalla(Screens.INICIO);
             }
         }
     }
@@ -173,38 +167,74 @@ public class MainController extends BaseScreenController implements Initializabl
     }
 
     @FXML
-    private void logout() {
-        menuPrincipal.setVisible(false);
-        cargarPantalla(Screens.LOGIN);
-    }
-
-    @FXML
     private void exit() {
         showAlertConfirmClose();
     }
 
 
-    public void generarInforme() {
+    @FXML
+    private void generarInforme() {
     }
 
-    public void help() {
+    @FXML
+    private void help() {
     }
 
-    public void cargarPartidaXML() {
-
+    @FXML
+    private void cargarPartidaXML() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(ScreenConstants.LOAD_XML);
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file == null) {
+            file = new File("xml/dungeon-V.02.xml");
+            showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, ScreenConstants.ERROR_LOADING_XML);
+        }
+        loadManagers(file);
     }
 
-    public void cargarPartidaBBDD() {
+    private void loadManagers(File file) {
+        demiurge.loadEnvironment(new DungeonLoader() {
+            @Override
+            public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration) {
+                dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
+            }
+        });
     }
 
-    public void nuevaPartida() {
+    @FXML
+    private void cargarPartidaBBDD() {
+    }
+
+    @FXML
+    private void nuevaPartida() {
         cargarPantalla(Screens.INICIO);
     }
 
-    public void guardar() {
+    @FXML
+    private void guardar() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(ScreenConstants.SAVE_XML);
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+            dungeonLoaderXML.save(demiurge, dungeonConfiguration, file);
+        } else {
+            showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, ScreenConstants.ERROR_SAVING_XML);
+        }
     }
 
     public void cargarPantallaJuego() {
-        cargarPantalla(Screens.PANTALLAJUEGO); 
+        cargarPantalla(Screens.CASA);
+    }
+
+    public void goToCasaMago() {
+        cargarPantalla(Screens.CASA);
+    }
+
+    public void cargarPantallaPelea() {
+        cargarPantalla(Screens.PANTALLAPELEAS);
     }
 }

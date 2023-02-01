@@ -7,6 +7,7 @@ module game {
     requires jakarta.inject;
     requires jakarta.cdi;
     requires java.logging;
+    requires lombok;
 
     exports game.util;
     exports game.demiurge;
@@ -21,13 +22,23 @@ module game {
     exports game.object;
     exports wizardNightmare;
 
-    exports game.gui.main;
-    exports game.gui.screens.main;
+    exports interfaz.main;
+    exports interfaz.main.common;
+    exports interfaz.screens.main;
+    exports interfaz.screens.common;
+    exports interfaz.screens.pantallainicio;
+    exports interfaz.screens.pantallajuego;
+    exports interfaz.screens.pantallapeleas;
+    exports interfaz.screens.casamago;
 
-    opens game.gui.main;
-    opens game.gui.main.common;
-    opens game.gui.screens.main to javafx.fxml;
-    opens game.gui.screens.common;
+    opens interfaz.main;
+    opens interfaz.main.common;
+    opens interfaz.screens.main;
+    opens interfaz.screens.common;
+    opens interfaz.screens.pantallainicio to javafx.fxml;
+    opens interfaz.screens.pantallajuego;
+    opens interfaz.screens.pantallapeleas to javafx.fxml;
+    opens interfaz.screens.casamago to javafx.fxml;
     opens game.dungeon;
     opens game.util;
 

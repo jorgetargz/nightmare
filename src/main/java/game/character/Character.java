@@ -42,6 +42,7 @@ public abstract class Character {
     }
 
     public Domain getDomain() { return domain; }
+    public String getName() { return name; }
 
     //Life
     public String lifeInfo(){ return getClass().getSimpleName() + " -> " + life; }
