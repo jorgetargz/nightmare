@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -100,48 +101,33 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     //TODO: FIN CAMBIO
 
     @Override
-    public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) {
+    public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File xmlFile) throws ParserConfigurationException, IOException, SAXException, ContainerUnacceptedItemException, XPathExpressionException, ValueOverMaxException, ContainerFullException, ItemCreationErrorException, SpellUnknowableException {
 //        final File XMLFILE = new File("xml/dungeon-V.02.xml");
         final File XSDFILE = new File("xml/dungeon_schema.xsd");
-        try {
 
-            validateAgainstSchema(xmlFile, XSDFILE);
-
-
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document baseXML = dBuilder.parse(xmlFile);
-            baseXML.getDocumentElement().normalize();
-            System.out.println(baseXML.getFirstChild());
+        validateAgainstSchema(xmlFile, XSDFILE);
 
 
-            XPathFactory xpf = XPathFactory.newInstance();
-            XPath xpath = xpf.newXPath();
-            // Si no se encuentra la expresión, devuelve "" pero NO NULL
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document baseXML = dBuilder.parse(xmlFile);
+        baseXML.getDocumentElement().normalize();
+        System.out.println(baseXML.getFirstChild());
 
-            createHome(demiurge, baseXML, xpath);
-            createRooms(demiurge, baseXML, xpath);
-            createWizard(demiurge, baseXML, xpath);
-            createEndConditions(demiurge, baseXML, xpath);
-            setDay(demiurge, baseXML, xpath);
-        } catch (Exception | SpellUnknowableException e) {
-            e.printStackTrace();
-        } catch (ItemCreationErrorException e) {
-            // da al crear el necklace
-            e.printStackTrace();
-        } catch (ContainerUnacceptedItemException e) {
-            // da al meter el item en el chest
-            e.printStackTrace();
-        } catch (ContainerFullException e) {
-            throw new RuntimeException(e);
-        } catch (ValueOverMaxException e) {
-            // da al improve los valores de un spell
-            e.printStackTrace();
-        }
+
+        XPathFactory xpf = XPathFactory.newInstance();
+        XPath xpath = xpf.newXPath();
+        // Si no se encuentra la expresión, devuelve "" pero NO NULL
+
+        createHome(demiurge, baseXML, xpath);
+        createRooms(demiurge, baseXML, xpath);
+        createWizard(demiurge, baseXML, xpath);
+        createEndConditions(demiurge, baseXML, xpath);
+        setDay(demiurge, baseXML, xpath);
     }
 
     @Override
-    public void save(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file) {
+    public void save(Demiurge demiurge, DungeonConfiguration dungeonConfiguration, File file) throws IOException {
 //        Path filePath = Paths.get("data/prueba.xml");
         Path filePath = file.toPath();
         StringBuilder demiurgeBuilder = new StringBuilder();
@@ -159,12 +145,8 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                 .append(day)
                 .append(endOfFine);
         String demiurgeStr = demiurgeBuilder.toString();
-        try {
-            Files.newBufferedWriter(filePath).flush();
-            Files.write(filePath, demiurgeStr.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
+        Files.newBufferedWriter(filePath).flush();
+        Files.write(filePath, demiurgeStr.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     private String saveDay(Demiurge demiurge) {
@@ -402,7 +384,8 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                 .append("<items>");
 
         Iterator<Item> itemJewelry = wizard.getJewelryBag().iterator();
-        StringBuilder itemBuilder2 = new StringBuilder();;
+        StringBuilder itemBuilder2 = new StringBuilder();
+        ;
         itemJewelry.forEachRemaining(item -> {
             if (item instanceof Necklace) {
                 itemBuilder2.append("necklace");
@@ -422,8 +405,6 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     }
 
 
-
-
     private static void setDay(Demiurge demiurge, Document baseXML, XPath xpath) {
         try {
             NodeList day = (NodeList) xpath.compile("/demiurge/day").evaluate(baseXML, XPathConstants.NODESET);
@@ -441,7 +422,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         NodeList conditions = (NodeList) expr.evaluate(baseXML, XPathConstants.NODESET);
         for (int i = 0; i < conditions.getLength(); i++) {
             Node condition = conditions.item(i);
-            if (elNodoEsElemento(condition)){
+            if (elNodoEsElemento(condition)) {
                 switch (getAtributo(condition, "type").toUpperCase()) {
                     //TODO: ADD MORE END CONDITIONS
                     case "VISITALLROOMS":
@@ -466,7 +447,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(XMLFILE));
         } catch (IOException | SAXException e) {
-            System.out.println("Exception: "+e);
+            System.out.println("Exception: " + e);
         }
     }
 
@@ -494,7 +475,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     private static void createDoors(Node doors) {
         for (int i = 0; i < doors.getChildNodes().getLength(); i++) {
             Node door = doors.getChildNodes().item(i);
-            if (elNodoEsElemento(door)){
+            if (elNodoEsElemento(door)) {
                 switch (door.getNodeName()) {
                     case "door":
                         createDoor(door);
@@ -511,7 +492,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         Site site2 = null;
         for (int i = 0; i < door.getChildNodes().getLength(); i++) {
             Node doorChild = door.getChildNodes().item(i);
-            if (elNodoEsElemento(doorChild)){
+            if (elNodoEsElemento(doorChild)) {
                 switch (doorChild.getNodeName()) {
                     case "idRoom1":
                         site1 = getSite(Integer.parseInt(doorChild.getTextContent()));
@@ -533,7 +514,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     private static Site getSite(int roomID) {
         Site r = ROOMS.stream().filter(room -> room.getID() == roomID).findFirst().orElse(null);
         if (r == null) {
-            if (roomID == -1){
+            if (roomID == -1) {
                 r = HOME;
             } else {
                 throw new RuntimeException("No se ha encontrado la sala con ID " + roomID);
@@ -592,7 +573,9 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         if (creature != null) {
             newR.setCreature(creature);
         }
-        if (visited){ newR.visit(); }
+        if (visited) {
+            newR.visit();
+        }
         ROOMS.add(newR);
     }
 
@@ -648,12 +631,13 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                 }
             }
         }
-         Creature c = new Creature(name, life, punch, d);
+        Creature c = new Creature(name, life, punch, d);
         for (int i = 0; i < spells.size(); i++) {
             c.addSpell(spells.get(i));
         }
         return c;
     }
+
     private static void createWizard(Demiurge demiurge, Document baseXML, XPath xpath) throws XPathExpressionException, ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException, ValueOverMaxException {
         // GETTING HOME CHILDREN --> [description, comfort, singa, chest, library]
         XPathExpression expr = xpath.compile("/demiurge/wizard/*");
@@ -684,10 +668,11 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             }
 
         }
-        Wizard wizard = new Wizard(NAME_WIZARD, INITIAL_LIFE_WIZARD, INITIAL_LIFE_MAX_WIZARD, INITIAL_ENERGY_WIZARD, INITIAL_ENERGY_MAX_WIZARD,WEARABLES_WIZARD, CRYSTAL_CARRIER_WIZARD, JEWELRY_BAG_WIZARD);
+        Wizard wizard = new Wizard(NAME_WIZARD, INITIAL_LIFE_WIZARD, INITIAL_LIFE_MAX_WIZARD, INITIAL_ENERGY_WIZARD, INITIAL_ENERGY_MAX_WIZARD, WEARABLES_WIZARD, CRYSTAL_CARRIER_WIZARD, JEWELRY_BAG_WIZARD);
         demiurge.setWizard(wizard);
         System.out.println(wizard);
     }
+
     private static void createJewelryBag(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
 //        <capacity>2</capacity>
 //			<items>
@@ -722,6 +707,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
         JEWELRY_BAG_WIZARD = jewelryBag;
 
     }
+
     private static void createWereables(Node node) throws ItemCreationErrorException, ContainerUnacceptedItemException, ContainerFullException {
 //        <weaponsMAX>1</weaponsMAX>
 //			<necklacesMAX>1</necklacesMAX>
@@ -759,7 +745,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                         break;
                     case "ringsMAX":
                         //<weaponsMAX>1</weaponsMAX>
-                        ringsMAX  = Integer.parseInt(chestChild.getTextContent());
+                        ringsMAX = Integer.parseInt(chestChild.getTextContent());
                         break;
                     case "items":
                         items = getItemsNode(chestChild, "//wizard/weareables/items/");
@@ -820,6 +806,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
             CRYSTAL_CARRIER_WIZARD.add(crystal);
         }
     }
+
     private static List<SingaCrystal> getCrystalsNode(Node node, String xPath) throws ItemCreationErrorException {
         List<SingaCrystal> crystals = new ArrayList<>();
         //            <crystals>
@@ -977,10 +964,10 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                     int level = Integer.parseInt(domainAndLevel.get("level").toString());
                     Spell spell = createSpellInstance(domain);
                     if (spell != null) {
-                        spell.improve(level-1); // <-- level-1 porque el level empieza en uno en el constructor de arriba
+                        spell.improve(level - 1); // <-- level-1 porque el level empieza en uno en el constructor de arriba
                         spells.add(spell);
                     } else {
-                        throw new RuntimeException("No se ha podido crear el spell[" + (i+1) + "] de " + xPath);
+                        throw new RuntimeException("No se ha podido crear el spell[" + (i + 1) + "] de " + xPath);
                     }
                 } else {
                     throw new IllegalArgumentException("NODO NO VÁLIDO EN " + xPath + "* : " + getNombre(spellChild));
@@ -995,9 +982,9 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
     private static Spell createSpellInstance(Domain domain) {
         // Depende del nivel, creamos un ataque acorde
         Spell spell = null;
-        switch (domain){
+        switch (domain) {
             case FIRE:
-                 spell = new FireAttack();
+                spell = new FireAttack();
                 break;
             case ELECTRICITY:
                 spell = new ElectricAttack();
@@ -1097,7 +1084,7 @@ public class DungeonLoaderManualXML implements DungeonLoaderXML {
                 switch (getNombre(nodeSinga)) {
                     case "currentValue":
                         //<currentValue>X</currentValue>
-                         values.put("currentValue", Integer.parseInt(nodeSinga.getTextContent()));
+                        values.put("currentValue", Integer.parseInt(nodeSinga.getTextContent()));
                         break;
                     case "maxValue":
                         //<maxValue>X</maxValue>
