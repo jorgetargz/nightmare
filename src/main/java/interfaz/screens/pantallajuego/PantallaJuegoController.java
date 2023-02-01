@@ -76,11 +76,12 @@ public class PantallaJuegoController extends BaseScreenController {
         singa.setText("Singa: " + demiurge.getHome().getSinga());
         energia.setText("Energía: " + demiurge.getWizard().getEnergy() + "/" + demiurge.getWizard().getEnergyMax());
         vida.setText("Vida: " + demiurge.getWizard().getLife() + "/" + demiurge.getWizard().getLifeMax());
-        descripcion.setText(demiurge.getDungeon().getRoom(demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).getID()).getDescription());
+        descripcion.setText(demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).getDescription());
         cristales.setText("Cristales: " + demiurge.getWizard().getCrystalCarrier().size());
     }
 
     private void loadRoom() {
+//        demiurge.getDungeonManager().openDoor(getPrincipalController().getCurrentRoom());
         currentRoom = demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom());
         if (!currentRoom.isVisited()) {
             demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).visit();
@@ -96,22 +97,15 @@ public class PantallaJuegoController extends BaseScreenController {
                 case AIR -> loadImage("/images/criaturas/criatura_05.png", imagenCriatura);
             }
             botonPelea.setDisable(false);
-//            try {
-//                Thread.sleep(2000);
-//                cargarPelea();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            //TODO: Cargar pelea
         } else {
             imagenCriatura.setImage(null);
             botonPelea.setDisable(true);
         }
         numberOfDoors = currentRoom.getNumberOfDoors();
-        firstRoom.setVisible(numberOfDoors < 1);
-        secondRoom.setVisible(numberOfDoors < 2);
-        thirdRoom.setVisible(numberOfDoors < 3);
-        fourthRoom.setVisible(numberOfDoors < 4);
+        firstRoom.setVisible(numberOfDoors >= 1);
+        secondRoom.setVisible(numberOfDoors >= 2);
+        thirdRoom.setVisible(numberOfDoors >= 3);
+        fourthRoom.setVisible(numberOfDoors >= 4);
         setButtonTexts(numberOfDoors);
     }
 
@@ -138,87 +132,78 @@ public class PantallaJuegoController extends BaseScreenController {
     }
 
     public void gatherCrystals() {
-        //check if there are crystals in the room
         if (demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).isEmpty()) {
             getPrincipalController().showAlert(Alert.AlertType.ERROR, "¡No hay cristales!", "No hay cristales en esta sala");
         } else {
-            demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).gather();
+            demiurge.getDungeonManager().gatherCrystals();
             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "¡Has recogido cristales!", "Cristales recogidos!");
             cristales.setText("Cristales: " + demiurge.getWizard().getCrystalCarrier().size());
-            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "¡Has recogido cristales!", "Cristales recogidos!");
         }
-        demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).gather();
-        getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "¡Has recogido cristales!", "Cristales recogidos!");
     }
 
     public void manageInventory() {
-        // ConsoleContainerManager
-
-        // TODO: de este método queda hacer la pantalla donde se pueda acceder a todos los métodos y hacer lo siguiente: Jimena 31.01
-        // 1. delete from jewelry bag
-        // 2. take from room
-        // 3. take from jewelry bag
-        // 4. drop in room
-        // 5. leave in the jewelry bag
-        // 6. exchange between wizard and room
-        // 7. exchange between wizard and jewelry bag
+        getPrincipalController().cargarPantallaInventario();
     }
-
-//    private void cargarPelea() {
-//        Creature c = currentRoom.getCreature();
-//
-//        if (c != null && c.getLife() > 0) {
-//            JOptionPane.showMessageDialog(null, "You, wizard, must fight with " + c.getName() + " !", "Fight!", JOptionPane.WARNING_MESSAGE);
-//            try {
-//                Thread.sleep(2000);
-//                getPrincipalController().cargarPantallaPelea();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     private void recargarPantalla(int roomId) { // general method
         getPrincipalController().setCurrentRoom(roomId);
         loadRoom();
+        loadInitialValues();
     }
 
     public void recargarPantallaFromButt1() {// puerta 1
         int roomId = getRoomIdFromDoor(numberOfDoors, 0);
         if (roomId != -12) {
-            recargarPantalla(roomId);
+            if (roomId == -1) {
+                getPrincipalController().goToCasaMago();
+            } else {
+                recargarPantalla(roomId-1);
+            }
         }
     }
 
     public void recargarPantallaFromButt2() { // puerta 2
         int roomId = getRoomIdFromDoor(numberOfDoors, 1);
         if (roomId != -12) {
-            recargarPantalla(roomId);
+            if (roomId == -1) {
+                getPrincipalController().goToCasaMago();
+            } else {
+                recargarPantalla(roomId-1);
+            }
         }
     }
 
     public void recargarPantallaFromButt3() { // puerta 3
         int roomId = getRoomIdFromDoor(numberOfDoors, 2);
         if (roomId != -12) {
-            recargarPantalla(roomId);
+            if (roomId == -1) {
+                getPrincipalController().goToCasaMago();
+            } else {
+                recargarPantalla(roomId-1);
+            }
         }
     }
 
     public void recargarPantallaFromButt4() { // puerta 4
         int roomId = getRoomIdFromDoor(numberOfDoors, 3);
         if (roomId != -12) {
-            recargarPantalla(roomId);
+            if (roomId == -1) {
+                getPrincipalController().goToCasaMago();
+            } else {
+                recargarPantalla(roomId-1);
+            }
         }
     }
 
     private int getRoomIdFromDoor(int numberOfDoors, int button) {
-        int idRoom = -12;
+        int idRoom = 0;
         for (int i = 0; i < numberOfDoors; i++) {
             Site room = demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).openDoor(i);
             switch (i) {
                 case 0, 1, 2, 3 -> {
                     if (i == button) {
                         idRoom = room.getID();
+                        i = numberOfDoors;
                     } else {
                         idRoom = -12;
                     }

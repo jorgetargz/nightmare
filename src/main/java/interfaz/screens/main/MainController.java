@@ -3,6 +3,11 @@ package interfaz.screens.main;
 import game.DungeonLoader;
 import game.DungeonLoaderXML;
 import game.demiurge.*;
+import game.object.ItemCreationErrorException;
+import game.objectContainer.exceptions.ContainerFullException;
+import game.objectContainer.exceptions.ContainerUnacceptedItemException;
+import game.spell.SpellUnknowableException;
+import game.util.ValueOverMaxException;
 import interfaz.screens.common.BaseScreenController;
 import interfaz.screens.common.ScreenConstants;
 import interfaz.screens.common.Screens;
@@ -198,7 +203,22 @@ public class MainController extends BaseScreenController implements Initializabl
         demiurge.loadEnvironment(new DungeonLoader() {
             @Override
             public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration) {
-                dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
+                try {
+                    dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
+                } catch (Exception e) {
+                    showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, "Error al cargar el XML");
+                } catch (ContainerUnacceptedItemException e) {
+                    throw new RuntimeException(e);
+                } catch (SpellUnknowableException e) {
+                    throw new RuntimeException(e);
+                } catch (ValueOverMaxException e) {
+                    throw new RuntimeException(e);
+                } catch (ContainerFullException e) {
+                    throw new RuntimeException(e);
+                } catch (ItemCreationErrorException e) {
+                    throw new RuntimeException(e);
+                }
+                //
             }
         });
     }
@@ -220,7 +240,11 @@ public class MainController extends BaseScreenController implements Initializabl
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(ScreenConstants.XML_FILES, "*.xml"));
         File file = fileChooser.showSaveDialog(primaryStage);
         if (file != null) {
-            dungeonLoaderXML.save(demiurge, dungeonConfiguration, file);
+            try {
+                dungeonLoaderXML.save(demiurge, dungeonConfiguration, file);
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, "Error al guardar el XML");
+            }
         } else {
             showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, ScreenConstants.ERROR_SAVING_XML);
         }
@@ -236,5 +260,9 @@ public class MainController extends BaseScreenController implements Initializabl
 
     public void cargarPantallaPelea() {
         cargarPantalla(Screens.PANTALLAPELEAS);
+    }
+
+    public void cargarPantallaInventario() {
+        cargarPantalla(Screens.INVENTARIO);
     }
 }

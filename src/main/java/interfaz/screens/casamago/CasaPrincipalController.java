@@ -4,6 +4,7 @@ import game.character.exceptions.WizardNotEnoughEnergyException;
 import game.character.exceptions.WizardTiredException;
 import game.demiurge.Demiurge;
 import game.demiurge.DemiurgeHomeManager;
+import game.demiurge.exceptions.EndGameException;
 import game.dungeon.HomeNotEnoughSingaException;
 import game.objectContainer.Container;
 import game.objectContainer.exceptions.ContainerEmptyException;
@@ -38,6 +39,14 @@ public class CasaPrincipalController extends BaseScreenController {
 
     @FXML
     private void goDungeon() {
+        try {
+            demiurge.getDungeonManager().enterDungeon();
+            getPrincipalController().setCurrentRoom(0);
+        } catch (WizardTiredException e) {
+            sleep();
+        } catch (EndGameException e) {
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fin del juego", "Has llegado al final del juego.");
+        }
         getPrincipalController().cargarPantalla(Screens.PANTALLAJUEGO);
     }
 
@@ -45,6 +54,7 @@ public class CasaPrincipalController extends BaseScreenController {
     private void sleep() {
         demiurge.nextDay();
         getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Dormir", "Has dormido una noche \ny has pasado al día " + demiurge.getDay());
+        loadInfo();
     }
 
     @FXML

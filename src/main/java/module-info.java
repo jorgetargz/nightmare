@@ -30,6 +30,7 @@ module game {
     exports interfaz.screens.pantallajuego;
     exports interfaz.screens.pantallapeleas;
     exports interfaz.screens.casamago;
+    exports interfaz.screens.inventario;
 
     opens interfaz.main;
     opens interfaz.main.common;
@@ -39,6 +40,7 @@ module game {
     opens interfaz.screens.pantallajuego;
     opens interfaz.screens.pantallapeleas to javafx.fxml;
     opens interfaz.screens.casamago to javafx.fxml;
+    opens interfaz.screens.inventario to javafx.fxml;
     opens game.dungeon;
     opens game.util;
 

@@ -7,7 +7,8 @@ public enum Screens {
     CASA("/fxml/casaMago/casaPrincipal.fxml"),
     PANTALLAJUEGO("/fxml/juego/pantallaJuego.fxml"),
     PANTALLAPELEAS("/fxml/juego/pantallaPeleas.fxml"),
-    BBDD("/fxml/partida/bbdd/bbdd.fxml");
+    BBDD("/fxml/partida/bbdd/bbdd.fxml"),
+    INVENTARIO("/fxml/juego/pantallaInventario.fxml");
 
     private final String path;
 

@@ -42,6 +42,8 @@ public class DemiurgeDungeonManager {
         }
     }
 
+    public void setCreature(Creature creature) { this.creature = creature; }
+
     public String getRoomInfo() {
         return site.toString();
     }

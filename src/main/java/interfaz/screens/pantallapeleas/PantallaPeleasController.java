@@ -77,6 +77,8 @@ public class PantallaPeleasController extends BaseScreenController {
         comboAtaques.setDisable(true);
         try {
             demiurge.getDungeonManager().creatureAttack();
+            //show an alert with the damage done
+            getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Ataque de la criatura", "Tienes " + demiurge.getDungeonManager().wizardLifeInfo() + " puntos de vida");
             isWizardTurn.set(true);
         } catch (CharacterKilledException e) {
             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Fin de la pelea", "El mago ha muerto");
@@ -99,6 +101,7 @@ public class PantallaPeleasController extends BaseScreenController {
             getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "error", "La sala no tiene una criatura");
         }
         demiurge.getDungeon().getRoom(getPrincipalController().getCurrentRoom()).getCreature().view();
+        demiurge.getDungeonManager().setCreature(creature);
         isWizardTurn.set(true);
     }
 
@@ -129,6 +132,7 @@ public class PantallaPeleasController extends BaseScreenController {
         } else {
             try {
                 demiurge.getDungeonManager().wizardAttack(comboAtaques.getValue());
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Ataque del mago", "La criatura tiene " + demiurge.getDungeonManager().creatureLifeInfo() + " puntos de vida");
                 isWizardTurn.set(false);
             } catch (WizardTiredException e) {
                 getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "No se ha podido atacar", "No se ha podido atacar\nEl mago está cansado");
