@@ -3,19 +3,22 @@ package interfaz.screens.casamago;
 import game.character.exceptions.WizardNotEnoughEnergyException;
 import game.character.exceptions.WizardTiredException;
 import game.demiurge.Demiurge;
+import game.demiurge.DemiurgeContainerManager;
 import game.demiurge.DemiurgeHomeManager;
 import game.demiurge.exceptions.EndGameException;
 import game.dungeon.HomeNotEnoughSingaException;
 import game.objectContainer.Container;
-import game.objectContainer.exceptions.ContainerEmptyException;
-import game.objectContainer.exceptions.ContainerErrorException;
+import game.objectContainer.exceptions.*;
 import game.util.ValueOverMaxException;
 import interfaz.screens.common.BaseScreenController;
 import interfaz.screens.common.Screens;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CasaPrincipalController extends BaseScreenController {
 
@@ -177,6 +180,226 @@ public class CasaPrincipalController extends BaseScreenController {
         } catch (WizardTiredException e) {
             sleep();
         }
+    }
+
+    @FXML
+    private void spells() {
+        ButtonType improveSpell = new ButtonType("Improve a spell");
+        ButtonType learnSpell = new ButtonType("Learn a spell");
+        Alert alert;
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Spells");
+        alert.setHeaderText("Manage spells");
+        alert.setContentText("Select an option:");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().add(improveSpell);
+        alert.getButtonTypes().add(learnSpell);
+        alert.showAndWait() // wait for the user to click a button
+                .filter(response -> response == ButtonType.YES)
+                .ifPresent(response -> {
+                    if (response == improveSpell) {
+                        getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Spells", "Not implemented yet.");
+                    } else if (response == learnSpell) {
+                        getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Spells", "Not implemented yet.");
+                    }
+                });
+    }
+
+    @FXML
+    private void storage() {
+        DemiurgeContainerManager containerManager = demiurge.getContainerManager();
+        Alert alertItems = new Alert(Alert.AlertType.INFORMATION);
+        alertItems.setTitle("Items");
+        alertItems.setHeaderText("Your items");
+        alertItems.setContentText("Weareables\n" + demiurge.getContainerManager().getWearables().toString() +
+                "\n\nBag\n" + demiurge.getContainerManager().getBag().toString() +
+                "\n\nSite\n" + demiurge.getContainerManager().getSite().toString());
+        alertItems.show();
+
+        ButtonType deleteFromStorageButtonType = new ButtonType("Delete from storage (item will disappear)");
+        ButtonType deleteFromJewelryBagButtonType = new ButtonType("Delete from jewelry bag (item will disappear)");
+        ButtonType takeFromStorageButtonType = new ButtonType("Take from storage");
+        ButtonType takeFromJewelryBagButtonType = new ButtonType("Take from jewelry bag");
+        ButtonType leaveInTheChestButtonType = new ButtonType("Leave in the chest");
+        ButtonType leaveInTheJewelryBagButtonType = new ButtonType("Leave in the jewelry bag");
+        ButtonType exchangeBetweenWizardAndChestButtonType = new ButtonType("Exchange between wizard and chest");
+        ButtonType exchangeBetweenWizardAndJewelryBagButtonType = new ButtonType("Exchange between wizard and jewelry bag");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Items");
+        alert.setHeaderText("Manage items");
+        alert.setContentText("Select an option:");
+        alert.getButtonTypes().clear();
+
+        DialogPane dialogPane = alert.getDialogPane();
+
+        Button deleteFromStorage = new Button(deleteFromStorageButtonType.getText());
+        deleteFromStorage.setOnAction(event -> {
+            menuContainerDelete(containerManager.getSite());
+            alert.close();
+        });
+        Button deleteFromJewelryBag = new Button(deleteFromJewelryBagButtonType.getText());
+        deleteFromJewelryBag.setOnAction(event -> {
+            menuContainerDelete(containerManager.getBag());
+            alert.close();
+        });
+        Button takeFromStorage = new Button(takeFromStorageButtonType.getText());
+        takeFromStorage.setOnAction(event -> {
+            try {
+                menuContainerAdd(containerManager.getSite(), containerManager.getWearables());
+            } catch (ContainerUnacceptedItemException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "You can't take this item.");
+            } catch (ContainerFullException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "Your bag is full.");
+            }
+            alert.close();
+        });
+        Button takeFromJewelryBag = new Button(takeFromJewelryBagButtonType.getText());
+        takeFromJewelryBag.setOnAction(event -> {
+            try {
+                menuContainerAdd(containerManager.getBag(), containerManager.getWearables());
+            } catch (ContainerUnacceptedItemException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "You can't take this item.");
+            } catch (ContainerFullException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "Your bag is full.");
+            }
+            alert.close();
+        });
+        Button leaveInTheChest = new Button(leaveInTheChestButtonType.getText());
+        leaveInTheChest.setOnAction(event -> {
+            try {
+                menuContainerAdd(containerManager.getWearables(), containerManager.getSite());
+            } catch (ContainerUnacceptedItemException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "You can't leave this item.");
+            } catch (ContainerFullException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "The chest is full.");
+            }
+            alert.close();
+        });
+        Button leaveInTheJewelryBag = new Button(leaveInTheJewelryBagButtonType.getText());
+        leaveInTheJewelryBag.setOnAction(event -> {
+            try {
+                menuContainerAdd(containerManager.getWearables(), containerManager.getBag());
+            } catch (ContainerUnacceptedItemException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "You can't leave this item.");
+            } catch (ContainerFullException e) {
+                getPrincipalController().showAlert(Alert.AlertType.INFORMATION, "Items", "The jewelry bag is full.");
+            }
+            alert.close();
+        });
+        Button exchangeBetweenWizardAndChest = new Button(exchangeBetweenWizardAndChestButtonType.getText());
+        exchangeBetweenWizardAndChest.setOnAction(event -> {
+            menuContainerExchange(containerManager.getWearables(), containerManager.getSite());
+            alert.close();
+        });
+        Button exchangeBetweenWizardAndJewelryBag = new Button(exchangeBetweenWizardAndJewelryBagButtonType.getText());
+        exchangeBetweenWizardAndJewelryBag.setOnAction(event -> {
+            menuContainerExchange(containerManager.getWearables(), containerManager.getBag());
+            dialogPane.getScene().getWindow().hide();
+            alert.close();
+        });
+
+        Button exit = new Button("Exit");
+        exit.setOnAction(event -> {
+            dialogPane.getScene().getWindow().hide();
+            alert.close();
+        });
+
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+        vbox.getChildren().addAll(deleteFromStorage, deleteFromJewelryBag, takeFromStorage, takeFromJewelryBag,
+                leaveInTheChest, leaveInTheJewelryBag, exchangeBetweenWizardAndChest, exchangeBetweenWizardAndJewelryBag, exit);
+
+        dialogPane.setContent(vbox);
+
+        alert.showAndWait();
+    }
+
+    void menuContainerDelete(Container c) {
+        DemiurgeContainerManager containerManager = demiurge.getContainerManager();
+        int cItem = selectItem(c);
+        if (cItem == 0)
+            return;
+
+        containerManager.deleteItem(c, cItem);
+    }
+
+    void menuContainerAdd(Container source, Container receptor) throws ContainerUnacceptedItemException, ContainerFullException {
+        DemiurgeContainerManager containerManager = demiurge.getContainerManager();
+
+        int sourceItem = selectItem(source);
+        if (sourceItem == 0)
+            return;
+        containerManager.addItem(source, sourceItem, receptor);
+    }
+
+    void menuContainerExchange(Container a, Container b) {
+        DemiurgeContainerManager containerManager = demiurge.getContainerManager();
+
+        int aItem = selectItem(a);
+        if (aItem == 0)
+            return;
+        int bItem = selectItem(b);
+        if (bItem == 0)
+            return;
+
+        try {
+            containerManager.exchangeItem(a, aItem, b, bItem);
+        } catch (ContainerInvalidExchangeException e) {
+            getPrincipalController().showAlert(Alert.AlertType.ERROR, "Error", "Invalid exchange.");
+        }
+    }
+
+    int selectItem(Container container) {
+        int available = container.size();
+        AtomicInteger selection = new AtomicInteger();
+        int position = 1;
+        Iterator it;
+
+        if (available == 0) {
+            getPrincipalController().showAlert(Alert.AlertType.ERROR, "Error", "No items available.");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Items");
+        alert.setHeaderText("Select item");
+        alert.setContentText("Select an item:");
+        alert.getButtonTypes().clear();
+
+        DialogPane dialogPane = alert.getDialogPane();
+
+        List<Button> buttons = new ArrayList<>();
+        it = container.iterator();
+        while (it.hasNext()) {
+
+            Button button = new Button(position++ + ".- " + it.next().toString());
+            button.setOnAction(event -> {
+                selection.set(Integer.parseInt(button.getText().split(".-")[0]) - 1);
+                dialogPane.getScene().getWindow().hide();
+                alert.close();
+            });
+            buttons.add(button);
+        }
+        Button exit = new Button("Exit");
+        exit.setOnAction(event -> {
+            selection.set(0);
+            dialogPane.getScene().getWindow().hide();
+            alert.close();
+        });
+        buttons.add(exit);
+
+        VBox vbox = new VBox();
+
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+        vbox.getChildren().addAll(buttons);
+
+        dialogPane.setContent(vbox);
+        alert.showAndWait();
+        alert.close();
+        // wait for the user to click a button
+
+        return selection.get();
     }
 
 }
