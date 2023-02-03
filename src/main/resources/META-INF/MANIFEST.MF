@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Main-Class: interfaz.main.DIJavafx
+Class-Path: javafx-controls-19-win.jar javafx-fxml-19.jar javafx-graphic
+ s-19-win.jar weld-spi-4.0.SP1.jar javafx-base-19.jar jakarta.inject-api
+ -2.0.0.jar jakarta.interceptor-api-2.0.0.jar jakarta.annotation-api-2.0
+ .0.jar virtualizedfx-11.2.6.jar weld-core-impl-4.0.3.Final.jar jakarta.
+ enterprise.cdi-api-3.0.0.jar javafx-controls-19.jar weld-se-core-4.0.3.
+ Final.jar weld-probe-core-4.0.3.Final.jar jboss-classfilewriter-1.2.5.F
+ inal.jar weld-environment-common-4.0.3.Final.jar javafx-base-19-win.jar
+  jboss-logging-3.4.3.Final.jar javafx-graphics-19.jar jakarta.el-api-4.
+ 0.0.jar javafx-fxml-19-win.jar materialfx-11.13.5.jar weld-api-4.0.SP1.
+ jar lombok-1.18.24.jar
+
