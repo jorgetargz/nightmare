@@ -1,8 +1,8 @@
 package interfaz.screens.main;
 
-import game.DungeonLoader;
 import game.DungeonLoaderXML;
-import game.demiurge.*;
+import game.demiurge.Demiurge;
+import game.demiurge.DungeonConfiguration;
 import game.object.ItemCreationErrorException;
 import game.objectContainer.exceptions.ContainerFullException;
 import game.objectContainer.exceptions.ContainerUnacceptedItemException;
@@ -200,25 +200,12 @@ public class MainController extends BaseScreenController implements Initializabl
     }
 
     private void loadManagers(File file) {
-        demiurge.loadEnvironment(new DungeonLoader() {
-            @Override
-            public void load(Demiurge demiurge, DungeonConfiguration dungeonConfiguration) {
-                try {
-                    dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
-                } catch (Exception e) {
-                    showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, "Error al cargar el XML");
-                } catch (ContainerUnacceptedItemException e) {
-                    throw new RuntimeException(e);
-                } catch (SpellUnknowableException e) {
-                    throw new RuntimeException(e);
-                } catch (ValueOverMaxException e) {
-                    throw new RuntimeException(e);
-                } catch (ContainerFullException e) {
-                    throw new RuntimeException(e);
-                } catch (ItemCreationErrorException e) {
-                    throw new RuntimeException(e);
-                }
-                //
+        demiurge.loadEnvironment((demiurge, dungeonConfiguration) -> {
+            try {
+                dungeonLoaderXML.load(demiurge, dungeonConfiguration, file);
+            } catch (Exception | ContainerUnacceptedItemException | SpellUnknowableException | ValueOverMaxException |
+                     ContainerFullException | ItemCreationErrorException e) {
+                showAlert(Alert.AlertType.ERROR, ScreenConstants.ERROR, "Error al cargar el XML");
             }
         });
     }
