@@ -25,8 +25,6 @@
                 </Menu>
                 <Menu fx:id="guardar" mnemonicParsing="false" text="Guardar">
                     <MenuItem fx:id="guardarXML" mnemonicParsing="false" onAction="#guardar" text="Guardar XML"/>
-<!--                    <MenuItem fx:id="guardarBBDD" mnemonicParsing="false" onAction="#guardarBBDD"-->
-<!--                              text="Guardar base de datos"/>-->
                 </Menu>
                 <Menu fx:id="menuCargar" mnemonicParsing="false" text="Partida">
                     <MenuItem fx:id="xml" mnemonicParsing="false" onAction="#cargarPartidaXML"
@@ -34,7 +32,6 @@
                     <MenuItem fx:id="bbdd" mnemonicParsing="false" onAction="#cargarPartidaBBDD"
                               text="Cargar base de datos"/>
                     <MenuItem fx:id="nueva" mnemonicParsing="false" onAction="#nuevaPartida" text="Nueva partida"/>
-                    <MenuItem fx:id="casaMago" mnemonicParsing="false" onAction="#goToCasaMago" text="Casa mago"/>
                 </Menu>
                 <Menu fx:id="acercaDe" mnemonicParsing="false" text="Acerca de">
                     <MenuItem fx:id="acercaDeItem" mnemonicParsing="false" onAction="#acercaDe" text="Acerca de"/>
