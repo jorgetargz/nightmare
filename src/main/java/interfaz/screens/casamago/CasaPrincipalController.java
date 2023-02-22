@@ -386,6 +386,15 @@ public class CasaPrincipalController extends BaseScreenController {
                 buttons.add(button);
             }
 
+            Button exit = new Button("Exit");
+            exit.setOnAction(event -> {
+                dialogPane.getScene().getWindow().hide();
+                alert.close();
+                selection.set(-1);
+            });
+
+            buttons.add(exit);
+
             VBox vbox = new VBox();
 
             vbox.setSpacing(10);
@@ -394,22 +403,10 @@ public class CasaPrincipalController extends BaseScreenController {
 
             dialogPane.setContent(vbox);
             alert.showAndWait();
-            alert.close();
 
             return selection.get();
         }
     }
 
-    public void showItemsAlert() {
-        Alert alertItems = new Alert(Alert.AlertType.INFORMATION);
-        alertItems.setTitle("Items");
-        alertItems.setHeaderText("Your items");
-        alertItems.setContentText(
-                "Weareables\n" + demiurge.getContainerManager().getWearables().toString() +
-                        "\n\nBag\n" + demiurge.getContainerManager().getBag().toString() +
-                        "\n\nSite\n" + demiurge.getContainerManager().getSite().toString()
-        );
-        alertItems.show();
-    }
 
 }
