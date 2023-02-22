@@ -17,7 +17,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CasaPrincipalController extends BaseScreenController {
@@ -208,13 +210,6 @@ public class CasaPrincipalController extends BaseScreenController {
     @FXML
     private void storage() {
         DemiurgeContainerManager containerManager = demiurge.getContainerManager();
-        Alert alertItems = new Alert(Alert.AlertType.INFORMATION);
-        alertItems.setTitle("Items");
-        alertItems.setHeaderText("Your items");
-        alertItems.setContentText("Weareables\n" + demiurge.getContainerManager().getWearables().toString() +
-                "\n\nBag\n" + demiurge.getContainerManager().getBag().toString() +
-                "\n\nSite\n" + demiurge.getContainerManager().getSite().toString());
-        alertItems.show();
 
         ButtonType deleteFromStorageButtonType = new ButtonType("Delete from storage (item will disappear)");
         ButtonType deleteFromJewelryBagButtonType = new ButtonType("Delete from jewelry bag (item will disappear)");
@@ -237,11 +232,13 @@ public class CasaPrincipalController extends BaseScreenController {
             menuContainerDelete(containerManager.getSite());
             alert.close();
         });
+
         Button deleteFromJewelryBag = new Button(deleteFromJewelryBagButtonType.getText());
         deleteFromJewelryBag.setOnAction(event -> {
             menuContainerDelete(containerManager.getBag());
             alert.close();
         });
+
         Button takeFromStorage = new Button(takeFromStorageButtonType.getText());
         takeFromStorage.setOnAction(event -> {
             try {
@@ -253,6 +250,7 @@ public class CasaPrincipalController extends BaseScreenController {
             }
             alert.close();
         });
+
         Button takeFromJewelryBag = new Button(takeFromJewelryBagButtonType.getText());
         takeFromJewelryBag.setOnAction(event -> {
             try {
@@ -264,6 +262,7 @@ public class CasaPrincipalController extends BaseScreenController {
             }
             alert.close();
         });
+
         Button leaveInTheChest = new Button(leaveInTheChestButtonType.getText());
         leaveInTheChest.setOnAction(event -> {
             try {
@@ -275,6 +274,7 @@ public class CasaPrincipalController extends BaseScreenController {
             }
             alert.close();
         });
+
         Button leaveInTheJewelryBag = new Button(leaveInTheJewelryBagButtonType.getText());
         leaveInTheJewelryBag.setOnAction(event -> {
             try {
@@ -286,11 +286,13 @@ public class CasaPrincipalController extends BaseScreenController {
             }
             alert.close();
         });
+
         Button exchangeBetweenWizardAndChest = new Button(exchangeBetweenWizardAndChestButtonType.getText());
         exchangeBetweenWizardAndChest.setOnAction(event -> {
             menuContainerExchange(containerManager.getWearables(), containerManager.getSite());
             alert.close();
         });
+
         Button exchangeBetweenWizardAndJewelryBag = new Button(exchangeBetweenWizardAndJewelryBagButtonType.getText());
         exchangeBetweenWizardAndJewelryBag.setOnAction(event -> {
             menuContainerExchange(containerManager.getWearables(), containerManager.getBag());
@@ -312,39 +314,42 @@ public class CasaPrincipalController extends BaseScreenController {
 
         dialogPane.setContent(vbox);
 
-        alert.showAndWait();
+        alert.show();
     }
 
     void menuContainerDelete(Container c) {
         DemiurgeContainerManager containerManager = demiurge.getContainerManager();
         int cItem = selectItem(c);
-        if (cItem == 0)
+        if (cItem == -1)
             return;
 
         containerManager.deleteItem(c, cItem);
+        loadInfo();
     }
 
     void menuContainerAdd(Container source, Container receptor) throws ContainerUnacceptedItemException, ContainerFullException {
         DemiurgeContainerManager containerManager = demiurge.getContainerManager();
 
         int sourceItem = selectItem(source);
-        if (sourceItem == 0)
+        if (sourceItem == -1)
             return;
         containerManager.addItem(source, sourceItem, receptor);
+        loadInfo();
     }
 
     void menuContainerExchange(Container a, Container b) {
         DemiurgeContainerManager containerManager = demiurge.getContainerManager();
 
         int aItem = selectItem(a);
-        if (aItem == 0)
+        if (aItem == -1)
             return;
         int bItem = selectItem(b);
-        if (bItem == 0)
+        if (bItem == -1)
             return;
 
         try {
             containerManager.exchangeItem(a, aItem, b, bItem);
+            loadInfo();
         } catch (ContainerInvalidExchangeException e) {
             getPrincipalController().showAlert(Alert.AlertType.ERROR, "Error", "Invalid exchange.");
         }
@@ -358,48 +363,53 @@ public class CasaPrincipalController extends BaseScreenController {
 
         if (available == 0) {
             getPrincipalController().showAlert(Alert.AlertType.ERROR, "Error", "No items available.");
-        }
+            return -1;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Items");
+            alert.setHeaderText("Select item");
+            alert.setContentText("Select an item:");
+            alert.getButtonTypes().clear();
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Items");
-        alert.setHeaderText("Select item");
-        alert.setContentText("Select an item:");
-        alert.getButtonTypes().clear();
+            DialogPane dialogPane = alert.getDialogPane();
 
-        DialogPane dialogPane = alert.getDialogPane();
+            List<Button> buttons = new ArrayList<>();
+            it = container.iterator();
+            while (it.hasNext()) {
 
-        List<Button> buttons = new ArrayList<>();
-        it = container.iterator();
-        while (it.hasNext()) {
+                Button button = new Button(position++ + ".- " + it.next().toString());
+                button.setOnAction(event -> {
+                    selection.set(Integer.parseInt(button.getText().split(".-")[0]) - 1);
+                    dialogPane.getScene().getWindow().hide();
+                    alert.close();
+                });
+                buttons.add(button);
+            }
 
-            Button button = new Button(position++ + ".- " + it.next().toString());
-            button.setOnAction(event -> {
-                selection.set(Integer.parseInt(button.getText().split(".-")[0]) - 1);
-                dialogPane.getScene().getWindow().hide();
-                alert.close();
-            });
-            buttons.add(button);
-        }
-        Button exit = new Button("Exit");
-        exit.setOnAction(event -> {
-            selection.set(0);
-            dialogPane.getScene().getWindow().hide();
+            VBox vbox = new VBox();
+
+            vbox.setSpacing(10);
+            vbox.setPadding(new Insets(20, 20, 20, 20));
+            vbox.getChildren().addAll(buttons);
+
+            dialogPane.setContent(vbox);
+            alert.showAndWait();
             alert.close();
-        });
-        buttons.add(exit);
 
-        VBox vbox = new VBox();
+            return selection.get();
+        }
+    }
 
-        vbox.setSpacing(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
-        vbox.getChildren().addAll(buttons);
-
-        dialogPane.setContent(vbox);
-        alert.showAndWait();
-        alert.close();
-        // wait for the user to click a button
-
-        return selection.get();
+    public void showItemsAlert() {
+        Alert alertItems = new Alert(Alert.AlertType.INFORMATION);
+        alertItems.setTitle("Items");
+        alertItems.setHeaderText("Your items");
+        alertItems.setContentText(
+                "Weareables\n" + demiurge.getContainerManager().getWearables().toString() +
+                        "\n\nBag\n" + demiurge.getContainerManager().getBag().toString() +
+                        "\n\nSite\n" + demiurge.getContainerManager().getSite().toString()
+        );
+        alertItems.show();
     }
 
 }
