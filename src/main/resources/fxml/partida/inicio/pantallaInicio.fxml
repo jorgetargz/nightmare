@@ -4,8 +4,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaz.screens.pantallainicio.PantallaInicioController">
-    <Label layoutX="286.0" layoutY="183.0" text="Carga una mazmorra en el menu partida" />
-    <Label layoutX="232.0" layoutY="263.0" text="Pulsa el boton para empezar la partida" />
-   <MFXButton layoutX="292.0" layoutY="320.0" mnemonicParsing="false" text="tira palante" onAction="#empezarPartida" />
+    <Label layoutX="232.0" layoutY="100.0" prefHeight="32.0" prefWidth="850.0" text="The Very High, Very Ancient and Very Well Tempered Supreme Council of the Arcane Magical Sciences has created the Ultimate prison for wayward wizards." />
+    <MFXButton buttonType="RAISED" layoutX="532.0" layoutY="527.0" mnemonicParsing="false" onAction="#empezarPartida" prefHeight="70.0" prefWidth="134.0" text="ADELANTE" />
+    <Label layoutX="232.0" layoutY="158.0" prefHeight="32.0" prefWidth="850.0" text="This prison, called The Magician's Nightmare, consists of putting the rebellious magician in a state of bodily suspensionlatent with total suppression of powers, while his mind, in active suspension, is introduced into a simulationdreamlike." />
+    <Label layoutX="232.0" layoutY="200.0" prefHeight="32.0" prefWidth="850.0" text="This simulation corresponds to a dungeon from which you must leave if you want to regain your freedom. but bliss dungeon is full of dangers and death in it also means real death." />
+    <Label layoutX="232.0" layoutY="250.0" prefHeight="32.0" prefWidth="850.0" text="These hazards are creatures that represent the errors and defects of the magician that he himself has to annihilate." />
+    <Label layoutX="232.0" layoutY="300.0" prefHeight="32.0" prefWidth="850.0" text="Every wizard who makes it out alive will have gone through a transformative re-education and reconversion process that will You will return to the real world as a good profit magician." />
+    <Label layoutX="420.0" layoutY="350.0" prefHeight="32.0" prefWidth="850.0" text="Very well, you have been a bad magician, and you have been sentenced to…" />
+    <Label layoutX="470.0" layoutY="400.0" prefHeight="32.0" prefWidth="850.0" text="---- THE WIZARD'S NIGHTMARE ----">
+        <font>
+            <Font size="24.0" />
+        </font>
+    </Label>
+    <Label layoutX="500.0" layoutY="450.0" prefHeight="32.0" prefWidth="850.0" text="Now you'll have to get awake" />
 </AnchorPane>
